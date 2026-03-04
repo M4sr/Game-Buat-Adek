@@ -737,7 +737,7 @@
         #s3 {
             flex-direction: column;
             gap: 0;
-            padding: 20px;
+            padding: 20px 20px 100px;
         }
 
         #s3 .scene-header {
@@ -844,7 +844,7 @@
             flex-direction: column;
             align-items: center;
             gap: 30px;
-            padding: 50px 20px;
+            padding: 50px 20px 120px;
             justify-content: flex-start;
         }
 
@@ -932,8 +932,8 @@
         #s-final {
             flex-direction: column;
             gap: 20px;
-            padding: 100px 20px 40px;
-            /* Increased top padding to avoid HUD */
+            padding: 100px 20px 150px;
+            /* Increased top padding to avoid HUD, and extra bottom padding to fix cut off */
             text-align: center;
             justify-content: flex-start;
         }
@@ -1218,6 +1218,7 @@
 
             #s-final {
                 padding-top: 80px;
+                padding-bottom: 150px;
             }
 
             .scene-header {

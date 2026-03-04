@@ -1,835 +1,1581 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Project: Save Adek's Smile 💔➡️💖</title>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
-  <style>
-    /* ============================================================
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Project: Save Adek's Smile 💔➡️💖</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ============================================================
        ROOT VARIABLES
     ============================================================ */
-    :root {
-      --pink:    #ff6b9d;
-      --purple:  #c77dff;
-      --blue:    #7b9cff;
-      --gold:    #ffd166;
-      --rose:    #ff8fab;
-      --lavender:#e0aaff;
-      --bg-deep: #06060f;
-      --bg-mid:  #10102a;
-      --font-t:  'Dancing Script', cursive;
-      --font-b:  'Nunito', sans-serif;
-      --world-s: 0;  /* 0 = gray, 1 = full color */
-    }
+        :root {
+            --pink: #ff6b9d;
+            --purple: #c77dff;
+            --blue: #7b9cff;
+            --gold: #ffd166;
+            --rose: #ff8fab;
+            --lavender: #e0aaff;
+            --bg-deep: #06060f;
+            --bg-mid: #10102a;
+            --font-t: 'Dancing Script', cursive;
+            --font-b: 'Nunito', sans-serif;
+            --world-s: 0;
+            /* 0 = gray, 1 = full color */
+        }
 
-    /* ============================================================
+        /* ============================================================
        RESET & BASE
     ============================================================ */
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    html, body {
-      width:100%; height:100%; overflow:hidden;
-      background:#000;
-      font-family: var(--font-b);
-      color:#fff;
-      -webkit-tap-highlight-color: transparent;
-    }
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /* ============================================================
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            font-family: var(--font-b);
+            color: #fff;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* ============================================================
        GAME CONTAINER
     ============================================================ */
-    #gc {
-      position:relative; width:100vw; height:100vh; overflow:hidden;
-      background: radial-gradient(ellipse at 50% 0%, #1a0a2e 0%, var(--bg-deep) 60%);
-      filter: saturate(var(--world-s));
-      transition: filter 1.5s ease, background 1.5s ease;
-    }
-    #gc.colorful {
-      background: radial-gradient(ellipse at 30% 20%, #2d0a4e, #0a1a3e 40%, #0a2e1a 80%);
-    }
+        #gc {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: radial-gradient(ellipse at 50% 0%, #1a0a2e 0%, var(--bg-deep) 60%);
+            filter: saturate(var(--world-s));
+            transition: filter 1.5s ease, background 1.5s ease;
+        }
 
-    /* ============================================================
+        #gc.colorful {
+            background: radial-gradient(ellipse at 30% 20%, #2d0a4e, #0a1a3e 40%, #0a2e1a 80%);
+        }
+
+        /* ============================================================
        PARTICLE CANVAS
     ============================================================ */
-    #pc {
-      position:absolute; inset:0; pointer-events:none; z-index:1;
-    }
+        #pc {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
 
-    /* ============================================================
+        /* ============================================================
        LOVE METER
     ============================================================ */
-    #lm {
-      position:fixed; top:16px; right:16px; z-index:100;
-      background:rgba(0,0,0,0.5); backdrop-filter:blur(10px);
-      border:1px solid rgba(255,107,157,0.3);
-      border-radius:20px; padding:8px 14px;
-      display:none; flex-direction:column; align-items:center; gap:4px;
-      min-width:110px;
-    }
-    #lm.show { display:flex; }
-    .lm-label { font-size:11px; color:var(--rose); letter-spacing:1px; text-transform:uppercase; }
-    .lm-bar { width:90px; height:10px; background:rgba(255,255,255,0.15); border-radius:10px; overflow:hidden; }
-    .lm-fill {
-      height:100%; border-radius:10px;
-      background: linear-gradient(90deg, #ff6b9d, #ffd166);
-      transition: width 0.8s cubic-bezier(.34,1.56,.64,1);
-      box-shadow: 0 0 8px rgba(255,107,157,0.6);
-    }
-    .lm-val { font-size:13px; font-weight:800; color:var(--gold); }
-    #score-ui {
-      position:fixed; top:16px; left:16px; z-index:100;
-      background:rgba(0,0,0,0.5); backdrop-filter:blur(10px);
-      border:1px solid rgba(255,209,102,0.3); border-radius:20px;
-      padding:8px 14px; font-size:13px; color:var(--gold);
-      display:none;
-    }
-    #score-ui.show { display:block; }
+        #lm {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 107, 157, 0.3);
+            border-radius: 20px;
+            padding: 8px 14px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            min-width: 110px;
+        }
 
-    /* ============================================================
+        #lm.show {
+            display: flex;
+        }
+
+        .lm-label {
+            font-size: 11px;
+            color: var(--rose);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .lm-bar {
+            width: 90px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .lm-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #ff6b9d, #ffd166);
+            transition: width 0.8s cubic-bezier(.34, 1.56, .64, 1);
+            box-shadow: 0 0 8px rgba(255, 107, 157, 0.6);
+        }
+
+        .lm-val {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--gold);
+        }
+
+        #score-ui {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 209, 102, 0.3);
+            border-radius: 20px;
+            padding: 8px 14px;
+            font-size: 13px;
+            color: var(--gold);
+            display: none;
+        }
+
+        #score-ui.show {
+            display: block;
+        }
+
+        /* ============================================================
        SCENES
     ============================================================ */
-    .scene {
-      position:absolute; inset:0; z-index:10;
-      display:flex; align-items:center; justify-content:center;
-      opacity:0; pointer-events:none; transition:opacity 0.6s ease;
-    }
-    .scene.active { opacity:1; pointer-events:all; }
+        .scene {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+        }
 
-    /* ============================================================
+        .scene.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* ============================================================
        SCENE: LOADING
     ============================================================ */
-    #s-load { background:var(--bg-deep); flex-direction:column; gap:24px; z-index:200; }
-    .load-heart {
-      font-size:64px;
-      animation: heartbeat 1.2s ease-in-out infinite;
-    }
-    @keyframes heartbeat {
-      0%,100% { transform:scale(1); }
-      50% { transform:scale(1.2); }
-    }
-    .load-text { font-family:var(--font-t); font-size:22px; color:var(--lavender); }
-    .load-bar-wrap {
-      width:200px; height:6px; background:rgba(255,255,255,0.1);
-      border-radius:10px; overflow:hidden;
-    }
-    .load-bar {
-      height:100%; width:0%; border-radius:10px;
-      background: linear-gradient(90deg, var(--pink), var(--purple));
-      animation: loadProgress 2.5s ease forwards;
-    }
-    @keyframes loadProgress { to { width:100%; } }
+        #s-load {
+            background: var(--bg-deep);
+            flex-direction: column;
+            gap: 24px;
+            z-index: 200;
+        }
 
-    /* ============================================================
+        .load-heart {
+            font-size: 64px;
+            animation: heartbeat 1.2s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        .load-text {
+            font-family: var(--font-t);
+            font-size: 22px;
+            color: var(--lavender);
+        }
+
+        .load-bar-wrap {
+            width: 200px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .load-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--pink), var(--purple));
+            animation: loadProgress 2.5s ease forwards;
+        }
+
+        @keyframes loadProgress {
+            to {
+                width: 100%;
+            }
+        }
+
+        /* ============================================================
        SCENE: OPENING
     ============================================================ */
-    #s-open {
-      flex-direction:column; text-align:center; gap:24px;
-      padding:40px 20px;
-    }
-    .open-bg {
-      position:absolute; inset:0;
-      background: radial-gradient(ellipse at 50% 50%, rgba(199,125,255,0.12) 0%, transparent 70%);
-    }
-    .open-logo {
-      font-size:72px; position:relative; z-index:2;
-      animation: floatLogo 3s ease-in-out infinite;
-      filter: drop-shadow(0 0 20px rgba(255,107,157,0.5));
-    }
-    @keyframes floatLogo {
-      0%,100% { transform:translateY(0) rotate(-5deg); }
-      50% { transform:translateY(-15px) rotate(5deg); }
-    }
-    .game-title {
-      font-family:var(--font-t); font-size:clamp(28px,7vw,52px);
-      background: linear-gradient(135deg, var(--pink), var(--gold), var(--lavender));
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-      position:relative; z-index:2;
-      text-shadow:none; line-height:1.2;
-    }
-    .open-dialogue {
-      max-width:500px; position:relative; z-index:2;
-      background:rgba(255,255,255,0.05); backdrop-filter:blur(8px);
-      border:1px solid rgba(255,107,157,0.2); border-radius:16px;
-      padding:24px; font-size:16px; line-height:2; color:var(--lavender);
-      min-height:80px;
-    }
-    .cursor-blink { animation:blink 0.8s step-end infinite; }
-    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+        #s-open {
+            flex-direction: column;
+            text-align: center;
+            gap: 24px;
+            padding: 40px 20px;
+        }
 
-    /* ============================================================
+        .open-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 50%, rgba(199, 125, 255, 0.12) 0%, transparent 70%);
+        }
+
+        .open-logo {
+            font-size: 72px;
+            position: relative;
+            z-index: 2;
+            animation: floatLogo 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 107, 157, 0.5));
+        }
+
+        @keyframes floatLogo {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-5deg);
+            }
+
+            50% {
+                transform: translateY(-15px) rotate(5deg);
+            }
+        }
+
+        .game-title {
+            font-family: var(--font-t);
+            font-size: clamp(28px, 7vw, 52px);
+            background: linear-gradient(135deg, var(--pink), var(--gold), var(--lavender));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 2;
+            text-shadow: none;
+            line-height: 1.2;
+        }
+
+        .open-dialogue {
+            max-width: 500px;
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 107, 157, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            font-size: 16px;
+            line-height: 2;
+            color: var(--lavender);
+            min-height: 80px;
+        }
+
+        .cursor-blink {
+            animation: blink 0.8s step-end infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* ============================================================
        BUTTONS
     ============================================================ */
-    .btn-primary {
-      font-family:var(--font-b); font-size:16px; font-weight:700;
-      padding:14px 36px; border:none; border-radius:50px; cursor:pointer;
-      background: linear-gradient(135deg, var(--pink), var(--purple));
-      color:#fff; letter-spacing:0.5px; position:relative; z-index:2;
-      box-shadow: 0 0 20px rgba(255,107,157,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
-      transition:all 0.3s ease; outline:none;
-    }
-    .btn-primary:hover { transform:translateY(-2px) scale(1.03); box-shadow:0 0 30px rgba(255,107,157,0.6); }
-    .btn-primary:active { transform:scale(0.97); }
-    .btn-primary:disabled { opacity:0.4; cursor:not-allowed; transform:none; }
+        .btn-primary {
+            font-family: var(--font-b);
+            font-size: 16px;
+            font-weight: 700;
+            padding: 14px 36px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            color: #fff;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            outline: none;
+        }
 
-    /* ============================================================
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 0 30px rgba(255, 107, 157, 0.6);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ============================================================
        SCENE: MOOD
     ============================================================ */
-    #s-mood { flex-direction:column; gap:28px; padding:30px 20px; text-align:center; }
-    .scene-title { font-family:var(--font-t); font-size:clamp(26px,6vw,44px); color:var(--lavender); }
-    .scene-subtitle { font-size:15px; color:rgba(255,255,255,0.6); line-height:1.8; }
-    .mood-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:380px; width:100%; }
-    .mood-btn {
-      background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15);
-      border-radius:16px; padding:18px 12px; cursor:pointer; color:#fff;
-      font-family:var(--font-b); font-size:14px; font-weight:600;
-      display:flex; flex-direction:column; align-items:center; gap:8px;
-      transition:all 0.3s ease; outline:none;
-    }
-    .mood-btn .emoji { font-size:32px; }
-    .mood-btn:hover { background:rgba(255,107,157,0.15); border-color:var(--pink); transform:scale(1.04); }
-    .mood-btn.selected {
-      background: linear-gradient(135deg, rgba(255,107,157,0.3), rgba(199,125,255,0.3));
-      border-color:var(--pink);
-      box-shadow: 0 0 20px rgba(255,107,157,0.3);
-    }
+        #s-mood {
+            flex-direction: column;
+            gap: 28px;
+            padding: 30px 20px;
+            text-align: center;
+        }
 
-    /* ============================================================
+        .scene-title {
+            font-family: var(--font-t);
+            font-size: clamp(26px, 6vw, 44px);
+            color: var(--lavender);
+        }
+
+        .scene-subtitle {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.8;
+        }
+
+        .mood-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            max-width: 380px;
+            width: 100%;
+        }
+
+        .mood-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 18px 12px;
+            cursor: pointer;
+            color: #fff;
+            font-family: var(--font-b);
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .mood-btn .emoji {
+            font-size: 32px;
+        }
+
+        .mood-btn:hover {
+            background: rgba(255, 107, 157, 0.15);
+            border-color: var(--pink);
+            transform: scale(1.04);
+        }
+
+        .mood-btn.selected {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.3), rgba(199, 125, 255, 0.3));
+            border-color: var(--pink);
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+        }
+
+        /* ============================================================
        SCENE: 1 – ORB GAME
     ============================================================ */
-    #s1 { flex-direction:column; gap:0; }
-    .scene-header {
-      text-align:center; padding:20px 20px 10px; position:relative; z-index:5; width:100%;
-    }
-    .scene-header h2 { font-family:var(--font-t); font-size:clamp(24px,5vw,38px); color:var(--gold); }
-    .scene-header p { font-size:14px; color:rgba(255,255,255,0.6); margin-top:4px; }
-    .orb-counter {
-      margin-top:8px; font-size:13px; color:var(--lavender);
-      background:rgba(0,0,0,0.3); display:inline-block; padding:4px 14px; border-radius:20px;
-    }
-    #orb-area {
-      flex:1; width:100%; position:relative; cursor:crosshair; overflow:hidden;
-    }
-    .orb {
-      position:absolute; border-radius:50%; cursor:pointer;
-      display:flex; align-items:center; justify-content:center;
-      font-size:22px; user-select:none;
-      animation: orbFloat linear forwards;
-      transition: transform 0.1s ease;
-    }
-    .orb:hover { transform: scale(1.2); }
-    .orb:active { transform: scale(0.9); }
-    @keyframes orbFloat {
-      0% { transform:translateY(100px) scale(0.5) rotate(0deg); opacity:0; }
-      10% { opacity:1; transform:translateY(0) scale(1) rotate(10deg); }
-      90% { opacity:0.8; }
-      100% { transform:translateY(-120vh) scale(0.8) rotate(360deg); opacity:0; }
-    }
-    .orb-glow {
-      position:absolute; inset:-50%; border-radius:50%;
-      background:radial-gradient(circle, rgba(255,255,255,0.3), transparent 70%);
-      animation: orbPulse 1.5s ease-in-out infinite;
-    }
-    @keyframes orbPulse { 0%,100%{transform:scale(1);opacity:0.5;} 50%{transform:scale(1.3);opacity:1;} }
-    .orb-burst {
-      position:absolute; inset:-20px; pointer-events:none;
-      animation: burst 0.5s ease forwards;
-    }
-    @keyframes burst { 0%{transform:scale(0);opacity:1;} 100%{transform:scale(3);opacity:0;} }
+        #s1 {
+            flex-direction: column;
+            gap: 0;
+        }
 
-    /* Memory Popup */
-    .mem-popup {
-      position:fixed; inset:0; z-index:50;
-      display:flex; align-items:center; justify-content:center;
-      background:rgba(0,0,0,0.7); backdrop-filter:blur(6px);
-      opacity:0; pointer-events:none; transition:opacity 0.4s;
-    }
-    .mem-popup.show { opacity:1; pointer-events:all; }
-    .mem-box {
-      background: linear-gradient(135deg, rgba(26,10,46,0.95), rgba(10,26,62,0.95));
-      border:1px solid rgba(255,107,157,0.4);
-      border-radius:24px; padding:32px 28px; max-width:360px; width:90%;
-      text-align:center; box-shadow: 0 0 40px rgba(255,107,157,0.2);
-      animation:popIn 0.4s cubic-bezier(.34,1.56,.64,1);
-    }
-    @keyframes popIn { from{transform:scale(0.8);} to{transform:scale(1);} }
-    .mem-icon { font-size:40px; margin-bottom:12px; animation:spin 2s linear infinite; }
-    @keyframes spin { to{transform:rotate(360deg);} }
-    .mem-text { font-size:16px; line-height:1.7; color:var(--lavender); font-style:italic; margin-bottom:20px; }
-    .mem-close {
-      background:rgba(255,107,157,0.2); border:1px solid var(--pink);
-      border-radius:20px; padding:8px 24px; color:#fff; cursor:pointer;
-      font-family:var(--font-b); font-size:14px; transition:all 0.2s;
-    }
-    .mem-close:hover { background:rgba(255,107,157,0.4); }
+        .scene-header {
+            text-align: center;
+            padding: 20px 20px 10px;
+            position: relative;
+            z-index: 5;
+            width: 100%;
+        }
 
-    /* ============================================================
+        .scene-header h2 {
+            font-family: var(--font-t);
+            font-size: clamp(24px, 5vw, 38px);
+            color: var(--gold);
+        }
+
+        .scene-header p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 4px;
+        }
+
+        .orb-counter {
+            margin-top: 8px;
+            font-size: 13px;
+            color: var(--lavender);
+            background: rgba(0, 0, 0, 0.3);
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+        }
+
+        #orb-area {
+            flex: 1;
+            width: 100%;
+            position: relative;
+            cursor: crosshair;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            user-select: none;
+            animation: orbFloat linear forwards;
+            transition: transform 0.1s ease;
+        }
+
+        .orb:hover {
+            transform: scale(1.2);
+        }
+
+        .orb:active {
+            transform: scale(0.9);
+        }
+
+        @keyframes orbFloat {
+            0% {
+                transform: translateY(100px) scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotate(10deg);
+            }
+
+            90% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-120vh) scale(0.8) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .orb-glow {
+            position: absolute;
+            inset: -50%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 70%);
+            animation: orbPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes orbPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.3);
+                opacity: 1;
+            }
+        }
+
+        .orb-burst {
+            position: absolute;
+            inset: -20px;
+            pointer-events: none;
+            animation: burst 0.5s ease forwards;
+        }
+
+        @keyframes burst {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
+
+        /* Memory Popup */
+        .mem-popup {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s;
+        }
+
+        .mem-popup.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .mem-box {
+            background: linear-gradient(135deg, rgba(26, 10, 46, 0.95), rgba(10, 26, 62, 0.95));
+            border: 1px solid rgba(255, 107, 157, 0.4);
+            border-radius: 24px;
+            padding: 32px 28px;
+            max-width: 360px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(255, 107, 157, 0.2);
+            animation: popIn 0.4s cubic-bezier(.34, 1.56, .64, 1);
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0.8);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .mem-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .mem-text {
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--lavender);
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .mem-close {
+            background: rgba(255, 107, 157, 0.2);
+            border: 1px solid var(--pink);
+            border-radius: 20px;
+            padding: 8px 24px;
+            color: #fff;
+            cursor: pointer;
+            font-family: var(--font-b);
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .mem-close:hover {
+            background: rgba(255, 107, 157, 0.4);
+        }
+
+        /* ============================================================
        SCENE: 2 – PUZZLE
     ============================================================ */
-    #s2 { flex-direction:column; gap:0; }
-    .match-counter {
-      margin-top:8px; font-size:13px; color:var(--lavender);
-      background:rgba(0,0,0,0.3); display:inline-block; padding:4px 14px; border-radius:20px;
-    }
-    .puzzle-grid {
-      display:grid; grid-template-columns:repeat(4,1fr);
-      gap:10px; padding:14px; width:100%; max-width:420px; margin:0 auto; flex:1;
-      align-content:center;
-    }
-    .card {
-      aspect-ratio:1; border-radius:12px; cursor:pointer;
-      perspective:600px; position:relative;
-      animation: cardAppear 0.4s ease backwards;
-    }
-    @keyframes cardAppear { from{transform:scale(0) rotate(20deg);opacity:0;} }
-    .card-inner {
-      width:100%; height:100%; position:relative;
-      transform-style:preserve-3d; transition:transform 0.5s ease;
-    }
-    .card.flipped .card-inner { transform:rotateY(180deg); }
-    .card.matched .card-inner { transform:rotateY(180deg); }
-    .card.matched .card-front {
-      background: linear-gradient(135deg, rgba(255,107,157,0.4), rgba(199,125,255,0.4));
-      border-color:var(--pink);
-      box-shadow:0 0 20px rgba(255,107,157,0.4);
-    }
-    .card-back, .card-front {
-      position:absolute; inset:0; border-radius:12px;
-      backface-visibility:hidden; display:flex; align-items:center; justify-content:center;
-    }
-    .card-back {
-      background: linear-gradient(135deg, rgba(26,10,46,0.9), rgba(10,26,62,0.9));
-      border:1px solid rgba(255,255,255,0.15); font-size:24px;
-    }
-    .card-back::after { content:'💫'; font-size:28px; }
-    .card-front {
-      background: linear-gradient(135deg, rgba(10,10,30,0.95), rgba(20,10,40,0.95));
-      border:1px solid rgba(199,125,255,0.3);
-      transform:rotateY(180deg);
-      flex-direction:column; gap:6px;
-    }
-    .card-emoji { font-size:clamp(22px,5vw,32px); }
-    .card-label { font-size:9px; color:var(--lavender); text-align:center; padding:0 4px; line-height:1.3; font-weight:600; }
-    .puzzle-msg {
-      text-align:center; padding:16px 20px;
-      font-size:15px; color:var(--lavender); font-style:italic; line-height:1.7;
-      min-height:60px;
-    }
+        #s2 {
+            flex-direction: column;
+            gap: 0;
+        }
 
-    /* ============================================================
+        .match-counter {
+            margin-top: 8px;
+            font-size: 13px;
+            color: var(--lavender);
+            background: rgba(0, 0, 0, 0.3);
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+        }
+
+        .puzzle-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 14px;
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+            flex: 1;
+            align-content: center;
+        }
+
+        .card {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            cursor: pointer;
+            perspective: 600px;
+            position: relative;
+            animation: cardAppear 0.4s ease backwards;
+        }
+
+        @keyframes cardAppear {
+            from {
+                transform: scale(0) rotate(20deg);
+                opacity: 0;
+            }
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card.matched .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card.matched .card-front {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.4), rgba(199, 125, 255, 0.4));
+            border-color: var(--pink);
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.4);
+        }
+
+        .card-back,
+        .card-front {
+            position: absolute;
+            inset: 0;
+            border-radius: 12px;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, rgba(26, 10, 46, 0.9), rgba(10, 26, 62, 0.9));
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 24px;
+        }
+
+        .card-back::after {
+            content: '💫';
+            font-size: 28px;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, rgba(10, 10, 30, 0.95), rgba(20, 10, 40, 0.95));
+            border: 1px solid rgba(199, 125, 255, 0.3);
+            transform: rotateY(180deg);
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .card-emoji {
+            font-size: clamp(22px, 5vw, 32px);
+        }
+
+        .card-label {
+            font-size: 9px;
+            color: var(--lavender);
+            text-align: center;
+            padding: 0 4px;
+            line-height: 1.3;
+            font-weight: 600;
+        }
+
+        .puzzle-msg {
+            text-align: center;
+            padding: 16px 20px;
+            font-size: 15px;
+            color: var(--lavender);
+            font-style: italic;
+            line-height: 1.7;
+            min-height: 60px;
+        }
+
+        /* ============================================================
        SCENE: 3 – CHOICES
     ============================================================ */
-    #s3 { flex-direction:column; gap:0; padding:20px; }
-    #s3 .scene-header { width:100%; }
-    #s3 .scene-header h2 { font-family:var(--font-t); font-size:clamp(24px,5vw,38px); color:var(--blue); }
-    .q-block { max-width:480px; width:100%; text-align:center; }
-    .q-question {
-      font-size:clamp(15px,3.5vw,18px); line-height:1.7; color:var(--lavender);
-      margin-bottom:24px; font-style:italic;
-    }
-    .q-options { display:flex; flex-direction:column; gap:12px; }
-    .q-option {
-      background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15);
-      border-radius:16px; padding:16px 20px; cursor:pointer; color:#fff;
-      font-family:var(--font-b); font-size:14px; font-weight:600;
-      text-align:left; transition:all 0.3s ease; outline:none;
-    }
-    .q-option:hover:not(:disabled) {
-      background:rgba(123,156,255,0.15); border-color:var(--blue);
-      transform:translateX(6px);
-    }
-    .q-option.correct { background:rgba(107,255,157,0.2); border-color:#6bff9d; }
-    .q-option.wrong { background:rgba(255,107,107,0.2); border-color:#ff6b6b; }
-    .q-feedback {
-      margin-top:16px; font-size:14px; font-style:italic;
-      line-height:1.7; color:var(--gold); min-height:40px; text-align:center;
-    }
-    .q-progress { 
-      display:flex; gap:8px; justify-content:center; margin-bottom:20px;
-    }
-    .q-dot {
-      width:10px; height:10px; border-radius:50%;
-      background:rgba(255,255,255,0.2); transition:all 0.3s;
-    }
-    .q-dot.done { background:var(--gold); box-shadow:0 0 8px var(--gold); }
-    .q-dot.active { background:var(--blue); box-shadow:0 0 8px var(--blue); }
+        #s3 {
+            flex-direction: column;
+            gap: 0;
+            padding: 20px;
+        }
 
-    /* ============================================================
-       SCENE: TWIST
+        #s3 .scene-header {
+            width: 100%;
+        }
+
+        #s3 .scene-header h2 {
+            font-family: var(--font-t);
+            font-size: clamp(24px, 5vw, 38px);
+            color: var(--blue);
+        }
+
+        .q-block {
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .q-question {
+            font-size: clamp(15px, 3.5vw, 18px);
+            line-height: 1.7;
+            color: var(--lavender);
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .q-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .q-option {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 16px 20px;
+            cursor: pointer;
+            color: #fff;
+            font-family: var(--font-b);
+            font-size: 14px;
+            font-weight: 600;
+            text-align: left;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .q-option:hover:not(:disabled) {
+            background: rgba(123, 156, 255, 0.15);
+            border-color: var(--blue);
+            transform: translateX(6px);
+        }
+
+        .q-option.correct {
+            background: rgba(107, 255, 157, 0.2);
+            border-color: #6bff9d;
+        }
+
+        .q-option.wrong {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: #ff6b6b;
+        }
+
+        .q-feedback {
+            margin-top: 16px;
+            font-size: 14px;
+            font-style: italic;
+            line-height: 1.7;
+            color: var(--gold);
+            min-height: 40px;
+            text-align: center;
+        }
+
+        .q-progress {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .q-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .q-dot.done {
+            background: var(--gold);
+            box-shadow: 0 0 8px var(--gold);
+        }
+
+        .q-dot.active {
+            background: var(--blue);
+            box-shadow: 0 0 8px var(--blue);
+        }
+
+        /* ============================================================
+       SCENE: TWIST 1 & 2
     ============================================================ */
-    #s-twist {
-      flex-direction:column; text-align:center; gap:20px;
-      padding:30px 20px;
-    }
-    .twist-castle {
-      font-size:clamp(60px,15vw,100px);
-      animation:floatLogo 3s ease-in-out infinite;
-      filter:drop-shadow(0 0 30px rgba(255,209,102,0.4));
-    }
-    .twist-dialogue {
-      max-width:520px; width:100%;
-      background:rgba(255,255,255,0.05); backdrop-filter:blur(8px);
-      border:1px solid rgba(255,107,157,0.3); border-radius:20px;
-      padding:24px 28px; font-size:15px; line-height:2;
-      color:var(--lavender); min-height:80px; font-style:italic;
-    }
-    .mamas-char {
-      display:flex; flex-direction:column; align-items:center; gap:12px;
-      transition:opacity 1s ease;
-    }
-    .char-body { display:flex; flex-direction:column; align-items:center; gap:8px; }
-    .char-face {
-      font-size:56px; animation:charIdle 2s ease-in-out infinite;
-      filter:drop-shadow(0 0 20px rgba(255,107,157,0.4));
-    }
-    @keyframes charIdle {
-      0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);}
-    }
-    .char-speech {
-      background:rgba(255,255,255,0.08); border:1px solid rgba(255,107,157,0.3);
-      border-radius:16px; padding:14px 20px; max-width:340px;
-      font-size:14px; line-height:1.8; color:#fff; font-style:italic;
-      min-height:50px;
-    }
+        #s-twist,
+        #s-twist2 {
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            padding: 50px 20px;
+            justify-content: flex-start;
+        }
 
-    /* ============================================================
+        .twist-castle {
+            font-size: clamp(50px, 12vw, 80px);
+            animation: floatLogo 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(255, 209, 102, 0.4));
+            margin-bottom: 10px;
+        }
+
+        .twist-dialogue {
+            max-width: 520px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 107, 157, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            font-size: 15px;
+            line-height: 2;
+            color: var(--lavender);
+            font-style: italic;
+            text-align: center;
+            box-sizing: border-box;
+            height: auto;
+            flex-shrink: 0;
+        }
+
+        .mamas-char {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            transition: opacity 1s ease;
+            margin-top: 20px;
+            /* Added spacing from the upper text */
+            width: 100%;
+        }
+
+        .char-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .char-face {
+            font-size: 56px;
+            animation: charIdle 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 107, 157, 0.4));
+        }
+
+        @keyframes charIdle {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .char-speech {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 107, 157, 0.3);
+            border-radius: 16px;
+            padding: 18px 20px;
+            max-width: 360px;
+            font-size: 15px;
+            line-height: 1.8;
+            color: #fff;
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 40px;
+            box-sizing: border-box;
+            height: auto;
+            flex-shrink: 0;
+        }
+
+        /* ============================================================
        SCENE: FINAL
     ============================================================ */
-    #s-final { flex-direction:column; gap:20px; padding:30px 20px; text-align:center; }
-    .letter-wrap {
-      max-width:480px; width:100%;
-      background: linear-gradient(135deg, rgba(26,10,46,0.9), rgba(10,26,62,0.9));
-      border:1px solid rgba(255,107,157,0.3); border-radius:24px;
-      padding:28px;
-      box-shadow: 0 0 40px rgba(255,107,157,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
-    }
-    .letter-top { font-size:36px; margin-bottom:12px; }
-    .letter-body {
-      font-size:15px; line-height:1.9; color:var(--lavender); font-style:italic;
-      text-align:left;
-    }
-    .final-q { font-family:var(--font-t); font-size:26px; color:var(--lavender); }
-    .final-btns { display:flex; flex-direction:column; gap:12px; align-items:center; width:100%; max-width:360px; }
-    .btn-forgive {
-      width:100%; padding:16px; border:none; border-radius:50px; cursor:pointer;
-      font-family:var(--font-b); font-size:16px; font-weight:800;
-      background: linear-gradient(135deg, #ff6b9d, #ff8fab);
-      color:#fff; box-shadow:0 0 24px rgba(255,107,157,0.4);
-      transition:all 0.3s ease; outline:none;
-    }
-    .btn-forgive:hover { transform:scale(1.04); box-shadow:0 0 40px rgba(255,107,157,0.6); }
-    .btn-wait {
-      width:100%; padding:14px; border:1px solid rgba(255,255,255,0.2);
-      border-radius:50px; cursor:pointer;
-      font-family:var(--font-b); font-size:14px; font-weight:600;
-      background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.6);
-      transition:all 0.3s ease; outline:none;
-    }
-    .btn-wait:hover { background:rgba(255,255,255,0.1); color:#fff; }
+        #s-final {
+            flex-direction: column;
+            gap: 20px;
+            padding: 100px 20px 40px;
+            /* Increased top padding to avoid HUD */
+            text-align: center;
+            justify-content: flex-start;
+        }
 
-    /* ============================================================
+        .letter-wrap {
+            max-width: 480px;
+            width: 100%;
+            background: linear-gradient(135deg, rgba(26, 10, 46, 0.9), rgba(10, 26, 62, 0.9));
+            border: 1px solid rgba(255, 107, 157, 0.3);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 0 40px rgba(255, 107, 157, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-sizing: border-box;
+            height: auto;
+            flex-shrink: 0;
+        }
+
+        .letter-top {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        .letter-body {
+            font-size: 15px;
+            line-height: 1.9;
+            color: var(--lavender);
+            font-style: italic;
+            text-align: left;
+        }
+
+        .final-q {
+            font-family: var(--font-t);
+            font-size: 26px;
+            color: var(--lavender);
+        }
+
+        .final-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+            width: 100%;
+            max-width: 360px;
+        }
+
+        .btn-forgive {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: var(--font-b);
+            font-size: 16px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b9d, #ff8fab);
+            color: #fff;
+            box-shadow: 0 0 24px rgba(255, 107, 157, 0.4);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .btn-forgive:hover {
+            transform: scale(1.04);
+            box-shadow: 0 0 40px rgba(255, 107, 157, 0.6);
+        }
+
+        .btn-wait {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: var(--font-b);
+            font-size: 14px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .btn-wait:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        /* ============================================================
        SCENE: ENDINGS
     ============================================================ */
-    #s-end-good, #s-end-wait {
-      flex-direction:column; gap:20px; padding:30px 20px; text-align:center;
-    }
-    .ending-icon { font-size:clamp(60px,15vw,100px); animation:floatLogo 3s ease-in-out infinite; }
-    .ending-title {
-      font-family:var(--font-t); font-size:clamp(28px,6vw,46px);
-      background: linear-gradient(135deg, var(--pink), var(--gold));
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-    }
-    .ending-msg {
-      max-width:440px; font-size:15px; line-height:1.9; color:var(--lavender);
-      font-style:italic;
-    }
-    .ending-chars { display:flex; align-items:center; justify-content:center; gap:16px; font-size:48px; }
-    .char-hearts { font-size:28px; animation:heartbeat 1s ease-in-out infinite; }
-    #confetti-wrap {
-      position:fixed; inset:0; pointer-events:none; z-index:300; overflow:hidden;
-    }
-    .confetti-piece {
-      position:absolute; width:10px; height:10px; top:-10px;
-      animation: confettiFall linear forwards;
-      border-radius:2px;
-    }
-    @keyframes confettiFall {
-      0% { transform:translateY(0) rotate(0); opacity:1; }
-      100% { transform:translateY(105vh) rotate(720deg); opacity:0; }
-    }
+        #s-end-good,
+        #s-end-wait {
+            flex-direction: column;
+            gap: 20px;
+            padding: 30px 20px;
+            text-align: center;
+        }
 
-    /* ============================================================
+        .ending-icon {
+            font-size: clamp(60px, 15vw, 100px);
+            animation: floatLogo 3s ease-in-out infinite;
+        }
+
+        .ending-title {
+            font-family: var(--font-t);
+            font-size: clamp(28px, 6vw, 46px);
+            background: linear-gradient(135deg, var(--pink), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .ending-msg {
+            max-width: 440px;
+            font-size: 15px;
+            line-height: 1.9;
+            color: var(--lavender);
+            font-style: italic;
+        }
+
+        .ending-chars {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            font-size: 48px;
+        }
+
+        .char-hearts {
+            font-size: 28px;
+            animation: heartbeat 1s ease-in-out infinite;
+        }
+
+        #confetti-wrap {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 300;
+            overflow: hidden;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            animation: confettiFall linear forwards;
+            border-radius: 2px;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(0) rotate(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(105vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* ============================================================
        TRANSITION OVERLAY
     ============================================================ */
-    #tov {
-      position:fixed; inset:0; z-index:150;
-      background:var(--bg-deep); opacity:0; pointer-events:none;
-      transition:opacity 0.5s ease;
-    }
-    #tov.fade-in { opacity:1; pointer-events:all; }
-    #tov.fade-out { opacity:0; pointer-events:none; }
+        #tov {
+            position: fixed;
+            inset: 0;
+            z-index: 150;
+            background: var(--bg-deep);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
 
-    /* ============================================================
+        #tov.fade-in {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        #tov.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* ============================================================
        FLOATING HEARTS (ambient)
     ============================================================ */
-    .float-heart {
-      position:absolute; pointer-events:none; z-index:2;
-      animation: floatUp linear forwards;
-      opacity:0.6;
-    }
-    @keyframes floatUp {
-      0% { transform:translateY(0) scale(0.5); opacity:0; }
-      10% { opacity:0.6; }
-      90% { opacity:0.3; }
-      100% { transform:translateY(-80vh) scale(1.2) rotate(20deg); opacity:0; }
-    }
+        .float-heart {
+            position: absolute;
+            pointer-events: none;
+            z-index: 2;
+            animation: floatUp linear forwards;
+            opacity: 0.6;
+        }
 
-    /* ============================================================
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.5);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.6;
+            }
+
+            90% {
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: translateY(-80vh) scale(1.2) rotate(20deg);
+                opacity: 0;
+            }
+        }
+
+        /* ============================================================
        MISC UTILITIES
     ============================================================ */
-    .hidden { display:none !important; }
-    .fade-in { animation: fadeInAnim 0.6s ease forwards; }
-    @keyframes fadeInAnim { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+        .hidden {
+            display: none !important;
+        }
 
-    /* ============================================================
+        .fade-in {
+            animation: fadeInAnim 0.6s ease forwards;
+        }
+
+        @keyframes fadeInAnim {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============================================================
        SCROLLABLE CONTENT
     ============================================================ */
-    .scroll-y { overflow-y:auto; max-height:100vh; width:100%; }
-    ::-webkit-scrollbar { width:4px; }
-    ::-webkit-scrollbar-track { background:transparent; }
-    ::-webkit-scrollbar-thumb { background:rgba(255,107,157,0.3); border-radius:4px; }
+        .scroll-y {
+            overflow-y: auto;
+            max-height: 100vh;
+            width: 100%;
+        }
 
-    /* ============================================================
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 107, 157, 0.3);
+            border-radius: 4px;
+        }
+
+        /* ============================================================
       RESPONSIVE FIX MOBILE
     ============================================================ */
 
-  @media (max-width: 600px) {
+        @media (max-width: 600px) {
 
-    /* HUD jangan nutup header */
-    #lm, #score-ui {
-      top: auto;
-      bottom: 12px;
-      transform: scale(0.9);
-    }
+            /* HUD jangan nutup header */
+            #lm,
+            #score-ui {
+                top: 12px;
+                bottom: auto;
+                transform: scale(0.9);
+            }
 
-    #lm {
-      right: 12px;
-    }
+            #lm {
+                right: 12px;
+            }
 
-    #score-ui {
-      left: 12px;
-    }
+            #score-ui {
+                left: 12px;
+            }
 
-    /* Scene header dikasih ruang */
-    .scene-header {
-      padding-top: 70px;
-      padding-bottom: 10px;
-    }
+            #s-final {
+                padding-top: 80px;
+            }
 
-    .scene-header h2 {
-      font-size: 22px;
-    }
+            .scene-header {
+                padding-top: 70px;
+                padding-bottom: 10px;
+            }
 
-    .scene-header p {
-      font-size: 13px;
-    }
+            .scene-header h2 {
+                font-size: 22px;
+            }
 
-    .orb-counter,
-    .match-counter {
-      font-size: 12px;
-    }
+            .scene-header p {
+                font-size: 13px;
+            }
 
-    /* Area game jangan ketiban */
-    #orb-area {
-      margin-top: 10px;
-    }
+            .orb-counter,
+            .match-counter {
+                font-size: 12px;
+            }
 
-    /* Opening dialog lebih kecil */
-    .open-dialogue {
-      font-size: 14px;
-      padding: 16px;
-    }
+            /* Area game jangan ketiban */
+            #orb-area {
+                margin-top: 10px;
+            }
 
-    .game-title {
-      font-size: 26px;
-    }
+            /* Opening dialog lebih kecil */
+            .open-dialogue {
+                font-size: 14px;
+                padding: 16px;
+            }
 
-    .btn-primary {
-      padding: 12px 24px;
-      font-size: 14px;
-    }
+            .game-title {
+                font-size: 26px;
+            }
 
-    /* Love meter lebih ramping */
-    .lm-bar {
-      width: 70px;
-      height: 8px;
-    }
+            .btn-primary {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
 
-    .lm-val {
-      font-size: 11px;
-    }
-  }
-  </style>
+            /* Love meter lebih ramping */
+            .lm-bar {
+                width: 70px;
+                height: 8px;
+            }
+
+            .lm-val {
+                font-size: 11px;
+            }
+        }
+    </style>
 </head>
+
 <body>
-<div id="gc">
-  <canvas id="pc"></canvas>
+    <audio id="bg-music" src="backsound.mp3" loop></audio>
+    <div id="gc">
+        <canvas id="pc"></canvas>
 
-  <!-- Love Meter -->
-  <div id="lm">
-    <div class="lm-label">💖 Love Meter</div>
-    <div class="lm-bar"><div class="lm-fill" id="lm-fill" style="width:30%"></div></div>
-    <div class="lm-val" id="lm-val">30%</div>
-  </div>
-  <div id="score-ui">✨ <span id="sv">0</span> pts</div>
+        <!-- Love Meter -->
+        <div id="lm">
+            <div class="lm-label">💖 Love Meter</div>
+            <div class="lm-bar">
+                <div class="lm-fill" id="lm-fill" style="width:30%"></div>
+            </div>
+            <div class="lm-val" id="lm-val">30%</div>
+        </div>
+        <div id="score-ui">✨ <span id="sv">0</span> pts</div>
 
-  <!-- ===== SCENE: LOADING ===== -->
-  <div id="s-load" class="scene active">
-    <div class="load-heart">💔</div>
-    <div class="load-text">Memuat dunia mimpi...</div>
-    <div class="load-bar-wrap"><div class="load-bar"></div></div>
-  </div>
+        <!-- ===== SCENE: LOADING ===== -->
+        <div id="s-load" class="scene active">
+            <div class="load-heart">💔</div>
+            <div class="load-text">Memuat dunia mimpi...</div>
+            <div class="load-bar-wrap">
+                <div class="load-bar"></div>
+            </div>
+        </div>
 
-  <!-- ===== SCENE: OPENING ===== -->
-  <div id="s-open" class="scene">
-    <div class="open-bg"></div>
-    <div class="open-logo" id="open-logo">💔</div>
-    <h1 class="game-title">Project: Save Adek's Smile</h1>
-    <div class="open-dialogue">
-      <span id="open-text"></span><span class="cursor-blink" id="cursor">|</span>
+        <!-- ===== SCENE: OPENING ===== -->
+        <div id="s-open" class="scene">
+            <div class="open-bg"></div>
+            <div class="open-logo" id="open-logo">💔</div>
+            <h1 class="game-title">Project: Save Adek's Smile</h1>
+            <div class="open-dialogue">
+                <span id="open-text"></span><span class="cursor-blink" id="cursor">|</span>
+            </div>
+            <button class="btn-primary" id="btn-enter" style="opacity:0;pointer-events:none" onclick="goToMood()">
+                ✨ Masuk ke Dunia Mimpi
+            </button>
+        </div>
+
+        <!-- ===== SCENE: MOOD ===== -->
+        <div id="s-mood" class="scene">
+            <h2 class="scene-title">Hai, Adek... 🥺</h2>
+            <p class="scene-subtitle">Sebelum petualangan dimulai,<br>gimana perasaan Adek sekarang?</p>
+            <div class="mood-grid">
+                <button class="mood-btn" onclick="pickMood(this,'sangat-marah')">
+                    <span class="emoji">😤</span><span>Sangat Marah</span>
+                </button>
+                <button class="mood-btn" onclick="pickMood(this,'sedih')">
+                    <span class="emoji">😢</span><span>Sedih Banget</span>
+                </button>
+                <button class="mood-btn" onclick="pickMood(this,'kecewa')">
+                    <span class="emoji">😞</span><span>Kecewa</span>
+                </button>
+                <button class="mood-btn" onclick="pickMood(this,'bingung')">
+                    <span class="emoji">😕</span><span>Bingung</span>
+                </button>
+            </div>
+            <button class="btn-primary" id="btn-start" style="display:none" onclick="startScene1()">
+                Mulai Petualangan 🌟
+            </button>
+        </div>
+
+        <!-- ===== SCENE 1: FOREST OF MEMORIES ===== -->
+        <div id="s1" class="scene">
+            <div class="scene-header">
+                <h2>🌳 Forest of Memories</h2>
+                <p>Adek, tangkap kenangan-kenangan yang melayang... ✨</p>
+                <div class="orb-counter">Kenangan: <span id="orb-count">0</span> / 5</div>
+            </div>
+            <div id="orb-area"></div>
+            <!-- Memory Popup -->
+            <div class="mem-popup" id="mem-popup">
+                <div class="mem-box">
+                    <div class="mem-icon" id="mem-icon">✨</div>
+                    <p class="mem-text" id="mem-text"></p>
+                    <button class="mem-close" onclick="closeMemory()">Lanjut →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SCENE 2: PUZZLE ===== -->
+        <div id="s2" class="scene">
+            <div class="scene-header">
+                <h2>🧩 Puzzle of Feelings</h2>
+                <p>Temukan pasangan kenangan yang cocok...</p>
+                <div class="match-counter">Match: <span id="match-count">0</span> / 6</div>
+            </div>
+            <div class="puzzle-grid" id="puzzle-grid"></div>
+
+            <!-- Puzzle Popup -->
+            <div class="mem-popup" id="puzzle-popup">
+                <div class="mem-box">
+                    <div class="mem-icon">💌</div>
+                    <p class="mem-text" id="puzzle-popup-text"></p>
+                    <button class="mem-close" onclick="closePuzzlePopup()">Lanjut →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SCENE 3: CHOICES ===== -->
+        <div id="s3" class="scene scroll-y">
+            <div class="scene-header">
+                <h2>💭 Choice of Fate</h2>
+                <p>Pilih dengan hati, Adek...</p>
+            </div>
+            <div class="q-progress" id="q-prog"></div>
+            <div id="q-block" class="q-block">
+                <p class="q-question" id="q-text"></p>
+                <div class="q-options" id="q-opts"></div>
+            </div>
+
+            <!-- Choice Popup -->
+            <div class="mem-popup" id="choice-popup">
+                <div class="mem-box">
+                    <div class="mem-icon" id="choice-popup-icon">💭</div>
+                    <p class="mem-text" id="choice-popup-text"></p>
+                    <button class="mem-close" onclick="closeChoicePopup()">Lanjut →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SCENE: TWIST 1 ===== -->
+        <div id="s-twist" class="scene scroll-y">
+            <div class="twist-castle" id="twist-castle">🏰</div>
+            <div class="twist-dialogue" id="twist-dlg"></div>
+            <button class="btn-primary" id="btn-next-twist" style="opacity:0;pointer-events:none;margin-top:20px;"
+                onclick="startTwist2Scene()">
+                Lihat Mamas... 🥺
+            </button>
+        </div>
+
+        <!-- ===== SCENE: TWIST 2 ===== -->
+        <div id="s-twist2" class="scene scroll-y">
+            <div class="mamas-char" id="mamas-c" style="opacity:0">
+                <div class="char-body">
+                    <div class="char-face" id="mamas-face">🥺</div>
+                    <div class="char-speech" id="mamas-speech"></div>
+                </div>
+            </div>
+            <button class="btn-primary" id="btn-final" style="opacity:0;pointer-events:none;margin-top:20px;"
+                onclick="goToFinal()">
+                Lanjut... 💭
+            </button>
+        </div>
+
+        <!-- ===== SCENE: FINAL ===== -->
+        <div id="s-final" class="scene scroll-y">
+            <div class="letter-wrap">
+                <div class="letter-top">💌</div>
+                <div class="letter-body" id="letter-body"></div>
+            </div>
+            <p class="final-q">Jadi… gimana, Adek? 🥺</p>
+            <div class="final-btns">
+                <button class="btn-forgive" onclick="chooseEnding('forgive')">
+                    💖 Adek maafin Mamas
+                </button>
+                <button class="btn-wait" onclick="chooseEnding('wait')">
+                    😤 Adek masih butuh waktu
+                </button>
+            </div>
+        </div>
+
+        <!-- ===== SCENE: ENDING GOOD ===== -->
+        <div id="s-end-good" class="scene">
+            <div id="confetti-wrap"></div>
+            <div class="ending-icon">🌈</div>
+            <h2 class="ending-title" id="end-good-title">Dunia Kembali Berwarna! ✨</h2>
+            <p class="ending-msg" id="end-good-msg"></p>
+            <div class="ending-chars">
+                <span>🥰</span>
+                <span class="char-hearts">💖💖💖</span>
+                <span>😍</span>
+            </div>
+            <button class="btn-primary" onclick="restartGame()" style="margin-top:8px">
+                🔄 Main Lagi
+            </button>
+        </div>
+
+        <!-- ===== SCENE: ENDING WAIT ===== -->
+        <div id="s-end-wait" class="scene">
+            <div class="ending-icon">🌙</div>
+            <h2 class="ending-title">Mamas Akan Menunggu... 💫</h2>
+            <p class="ending-msg" id="end-wait-msg"></p>
+            <button class="btn-primary" onclick="restartGame()" style="margin-top:8px">
+                🔄 Main Lagi
+            </button>
+        </div>
+
+        <!-- Transition Overlay -->
+        <div id="tov"></div>
     </div>
-    <button class="btn-primary" id="btn-enter" style="opacity:0;pointer-events:none" onclick="goToMood()">
-      ✨ Masuk ke Dunia Mimpi
-    </button>
-  </div>
 
-  <!-- ===== SCENE: MOOD ===== -->
-  <div id="s-mood" class="scene">
-    <h2 class="scene-title">Hai, Adek... 🥺</h2>
-    <p class="scene-subtitle">Sebelum petualangan dimulai,<br>gimana perasaan Adek sekarang?</p>
-    <div class="mood-grid">
-      <button class="mood-btn" onclick="pickMood(this,'sangat-marah')">
-        <span class="emoji">😤</span><span>Sangat Marah</span>
-      </button>
-      <button class="mood-btn" onclick="pickMood(this,'sedih')">
-        <span class="emoji">😢</span><span>Sedih Banget</span>
-      </button>
-      <button class="mood-btn" onclick="pickMood(this,'kecewa')">
-        <span class="emoji">😞</span><span>Kecewa</span>
-      </button>
-      <button class="mood-btn" onclick="pickMood(this,'bingung')">
-        <span class="emoji">😕</span><span>Bingung</span>
-      </button>
-    </div>
-    <button class="btn-primary" id="btn-start" style="display:none" onclick="startScene1()">
-      Mulai Petualangan 🌟
-    </button>
-  </div>
+    <script>
+        // Inisialisasi Audio Autoplay pada interaksi pertama
+        const globalAudioInit = () => {
+            const bgMusic = document.getElementById('bg-music');
+            if (bgMusic) {
+                bgMusic.volume = 0.1; // Mengurangi volume menjadi 30%
+                if (bgMusic.paused) {
+                    bgMusic.play().catch(e => console.log('BGM play failed:', e));
+                }
+            }
+            document.body.removeEventListener('click', globalAudioInit);
+            document.body.removeEventListener('touchstart', globalAudioInit);
+        };
+        document.body.addEventListener('click', globalAudioInit);
+        document.body.addEventListener('touchstart', globalAudioInit);
 
-  <!-- ===== SCENE 1: FOREST OF MEMORIES ===== -->
-  <div id="s1" class="scene">
-    <div class="scene-header">
-      <h2>🌳 Forest of Memories</h2>
-      <p>Adek, tangkap kenangan-kenangan yang melayang... ✨</p>
-      <div class="orb-counter">Kenangan: <span id="orb-count">0</span> / 5</div>
-    </div>
-    <div id="orb-area"></div>
-    <!-- Memory Popup -->
-    <div class="mem-popup" id="mem-popup">
-      <div class="mem-box">
-        <div class="mem-icon" id="mem-icon">✨</div>
-        <p class="mem-text" id="mem-text"></p>
-        <button class="mem-close" onclick="closeMemory()">Lanjut →</button>
-      </div>
-    </div>
-  </div>
+        /* ================================================================
+           CONFIG — GANTI URL INI SETELAH DEPLOY GOOGLE APPS SCRIPT
+        ================================================================ */
+        const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbzSqi0Yz4PekHZSBTSBGjlNVm3dybyNoBmHB5PnGGeOLGidDzP2Ka9HrhO1GZVwD57sqA/exec';
 
-  <!-- ===== SCENE 2: PUZZLE ===== -->
-  <div id="s2" class="scene">
-    <div class="scene-header">
-      <h2>🧩 Puzzle of Feelings</h2>
-      <p>Temukan pasangan kenangan yang cocok...</p>
-      <div class="match-counter">Match: <span id="match-count">0</span> / 6</div>
-    </div>
-    <div class="puzzle-grid" id="puzzle-grid"></div>
-    <div class="puzzle-msg" id="puzzle-msg"></div>
-  </div>
+        /* ================================================================
+           GAME STATE
+        ================================================================ */
+        const G = {
+            name: 'Adek',
+            mamas: 'Mamas',
+            mood: '',
+            love: 30,
+            score: 0,
+            choices: [],
+            orbsCaught: 0,
+            matchesDone: 0,
+            qIdx: 0,
+            ending: '',
+            startTime: Date.now()
+        };
 
-  <!-- ===== SCENE 3: CHOICES ===== -->
-  <div id="s3" class="scene scroll-y">
-    <div class="scene-header">
-      <h2>💭 Choice of Fate</h2>
-      <p>Pilih dengan hati, Adek...</p>
-    </div>
-    <div class="q-progress" id="q-prog"></div>
-    <div id="q-block" class="q-block">
-      <p class="q-question" id="q-text"></p>
-      <div class="q-options" id="q-opts"></div>
-      <div class="q-feedback" id="q-fb"></div>
-    </div>
-  </div>
+        /* ================================================================
+           CONTENT DATA
+        ================================================================ */
+        const MEMORIES = [
+            { icon: '🌟', text: 'Waktu pertama kali Mamas ketemu Adek… jantung Mamas langsung deg-degan nggak karuan. 🥺' },
+            { icon: '😂', text: 'Pertama kali kita ketawa bareng sampai sakit perut… Mamas sadar, ini orang spesial banget.' },
+            { icon: '🍜', text: 'Waktu kita makan bareng pertama kali… Mamas diam-diam nutupin muka karena senyum nggak bisa ditahan. 😊' },
+            { icon: '🌙', text: 'Malam itu, Adek kirim pesan panjang sebelum tidur. Mamas baca berkali-kali sambil senyum sendiri.' },
+            { icon: '🤝', text: 'Waktu Adek lagi down… Mamas pengen banget ada. Nggak harus ngomong apa-apa, cukup ada di sini.' },
+            { icon: '💌', text: 'Setiap pesan dari Adek selalu jadi hal pertama yang Mamas cari tiap pagi. Tanpa sadar, Adek udah jadi kebiasaan Mamas. ❤️' },
+            { icon: '🎵', text: 'Ada satu lagu yang selalu bikin Mamas inget Adek… sampai sekarang Mamas nggak bisa dengerin tanpa senyum.' },
+        ];
 
-  <!-- ===== SCENE: TWIST ===== -->
-  <div id="s-twist" class="scene scroll-y">
-    <div class="twist-castle" id="twist-castle">🏰</div>
-    <div class="twist-dialogue" id="twist-dlg"></div>
-    <div class="mamas-char" id="mamas-c" style="opacity:0">
-      <div class="char-body">
-        <div class="char-face" id="mamas-face">🥺</div>
-        <div class="char-speech" id="mamas-speech"></div>
-      </div>
-    </div>
-    <button class="btn-primary" id="btn-final" style="opacity:0;pointer-events:none" onclick="goToFinal()">
-      Lanjut... 💭
-    </button>
-  </div>
+        const CARDS = [
+            { id: 1, emoji: '🌸', label: 'Awal Kita' },
+            { id: 2, emoji: '😂', label: 'Tawa Bareng' },
+            { id: 3, emoji: '🌙', label: 'Malam Indah' },
+            { id: 4, emoji: '💌', label: 'Pesan Pagi' },
+            { id: 5, emoji: '🎵', label: 'Lagu Kita' },
+            { id: 6, emoji: '🤗', label: 'Rasa Aman' },
+        ];
 
-  <!-- ===== SCENE: FINAL ===== -->
-  <div id="s-final" class="scene scroll-y">
-    <div class="letter-wrap">
-      <div class="letter-top">💌</div>
-      <div class="letter-body" id="letter-body"></div>
-    </div>
-    <p class="final-q">Jadi… gimana, Adek? 🥺</p>
-    <div class="final-btns">
-      <button class="btn-forgive" onclick="chooseEnding('forgive')">
-        💖 Adek maafin Mamas
-      </button>
-      <button class="btn-wait" onclick="chooseEnding('wait')">
-        😤 Adek masih butuh waktu
-      </button>
-    </div>
-  </div>
+        const QUESTIONS = [
+            {
+                q: '"Adek… kalau kamu marah sama seseorang yang kamu sayang, apa yang paling kamu harapkan dari mereka?"',
+                opts: [
+                    { t: '💨 Menghilang dan biarkan aku tenang sendiri', correct: false },
+                    { t: '🤐 Diam aja, jangan ganggu aku', correct: false },
+                    { t: '💬 Datang, duduk di samping aku, dan minta maaf dengan jujur ❤️', correct: true },
+                    { t: '🎁 Beli sesuatu supaya aku senang', correct: false },
+                ],
+                feedbackOk: '✨ Iya… itulah yang Mamas harusnya lakuin. Datang, bukannya lari.',
+                feedbackWrong: '💭 Mamas pernah salah kayak gitu… pergi waktu harusnya hadir.'
+            },
+            {
+                q: '"Menurutmu, apa yang bikin hubungan tetap kuat meski ada pertengkaran?"',
+                opts: [
+                    { t: '🏃 Hindari konflik dengan tidak membahasnya', correct: false },
+                    { t: '❤️ Saling mau bicara jujur, mau minta maaf, dan mau memaafkan', correct: true },
+                    { t: '😎 Pura-pura baik-baik saja', correct: false },
+                    { t: '📵 Diam sampai yang lain duluan yang minta maaf', correct: false },
+                ],
+                feedbackOk: '🥺 Benar sekali, Adek. Dan Mamas belajar itu dari kamu.',
+                feedbackWrong: '💔 Mamas sempat salah pikir kayak itu juga… tapi ternyata yang penting adalah keberanian untuk bicara.'
+            },
+            {
+                q: '"Adek… kalau ada orang yang takut kehilangan kamu tapi nggak tahu cara bilangnya… apa yang sebaiknya orang itu lakukan?"',
+                opts: [
+                    { t: '😤 Marah-marah supaya diperhatiin', correct: false },
+                    { t: '💔 Diam dan berharap dimengerti sendiri', correct: false },
+                    { t: '🥺 Jujur aja, ceritain rasa takutnya dengan tulus ❤️', correct: true },
+                    { t: '🤷 Ya udah, relain aja', correct: false },
+                ],
+                feedbackOk: '💖 Mamas tahu jawabannya sekarang. Mamas harus jujur sama Adek.',
+                feedbackWrong: '😔 Mamas pernah melakukan itu… dan hasilnya menyakiti Adek. Maafin Mamas ya.'
+            }
+        ];
 
-  <!-- ===== SCENE: ENDING GOOD ===== -->
-  <div id="s-end-good" class="scene">
-    <div id="confetti-wrap"></div>
-    <div class="ending-icon">🌈</div>
-    <h2 class="ending-title" id="end-good-title">Dunia Kembali Berwarna! ✨</h2>
-    <p class="ending-msg" id="end-good-msg"></p>
-    <div class="ending-chars">
-      <span>🥰</span>
-      <span class="char-hearts">💖💖💖</span>
-      <span>😍</span>
-    </div>
-    <button class="btn-primary" onclick="restartGame()" style="margin-top:8px">
-      🔄 Main Lagi
-    </button>
-  </div>
+        const TWIST_LINES = [
+            'Adek… sudah lama perjalanan ini.',
+            'Dunia ini memudar bukan karena ada yang jahat…',
+            'Tapi karena ada seseorang yang terlalu takut kehilangan kamu…',
+            '…dan tidak tahu cara bilang "maaf" dengan benar.',
+            'Selama ini kamu kira musuhnya ada di luar sana…',
+            '💥 Padahal "musuh" itu… adalah rasa takutnya Mamas sendiri.',
+        ];
 
-  <!-- ===== SCENE: ENDING WAIT ===== -->
-  <div id="s-end-wait" class="scene">
-    <div class="ending-icon">🌙</div>
-    <h2 class="ending-title">Mamas Akan Menunggu... 💫</h2>
-    <p class="ending-msg" id="end-wait-msg"></p>
-    <button class="btn-primary" onclick="restartGame()" style="margin-top:8px">
-      🔄 Main Lagi
-    </button>
-  </div>
+        const MAMAS_SPEECH_LINES = [
+            'Adek…',
+            'Mamas minta maaf. 🥺',
+            'Bukan karena Mamas harus.',
+            'Tapi karena Mamas nggak mau kehilangan kamu.',
+            'Mamas nggak sempurna…',
+            '…tapi cinta Mamas ke Adek, itu nyata. ❤️',
+        ];
 
-  <!-- Transition Overlay -->
-  <div id="tov"></div>
-</div>
-
-<script>
-/* ================================================================
-   CONFIG — GANTI URL INI SETELAH DEPLOY GOOGLE APPS SCRIPT
-================================================================ */
-const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbzSqi0Yz4PekHZSBTSBGjlNVm3dybyNoBmHB5PnGGeOLGidDzP2Ka9HrhO1GZVwD57sqA/exec';
-
-/* ================================================================
-   GAME STATE
-================================================================ */
-const G = {
-  name: 'Adek',
-  mamas: 'Mamas',
-  mood: '',
-  love: 30,
-  score: 0,
-  choices: [],
-  orbsCaught: 0,
-  matchesDone: 0,
-  qIdx: 0,
-  ending: '',
-  startTime: Date.now()
-};
-
-/* ================================================================
-   CONTENT DATA
-================================================================ */
-const MEMORIES = [
-  { icon:'🌟', text:'Waktu pertama kali Mamas ketemu Adek… jantung Mamas langsung deg-degan nggak karuan. 🥺' },
-  { icon:'😂', text:'Pertama kali kita ketawa bareng sampai sakit perut… Mamas sadar, ini orang spesial banget.' },
-  { icon:'🍜', text:'Waktu kita makan bareng pertama kali… Mamas diam-diam nutupin muka karena senyum nggak bisa ditahan. 😊' },
-  { icon:'🌙', text:'Malam itu, Adek kirim pesan panjang sebelum tidur. Mamas baca berkali-kali sambil senyum sendiri.' },
-  { icon:'🤝', text:'Waktu Adek lagi down… Mamas pengen banget ada. Nggak harus ngomong apa-apa, cukup ada di sini.' },
-  { icon:'💌', text:'Setiap pesan dari Adek selalu jadi hal pertama yang Mamas cari tiap pagi. Tanpa sadar, Adek udah jadi kebiasaan Mamas. ❤️' },
-  { icon:'🎵', text:'Ada satu lagu yang selalu bikin Mamas inget Adek… sampai sekarang Mamas nggak bisa dengerin tanpa senyum.' },
-];
-
-const CARDS = [
-  { id:1, emoji:'🌸', label:'Awal Kita' },
-  { id:2, emoji:'😂', label:'Tawa Bareng' },
-  { id:3, emoji:'🌙', label:'Malam Indah' },
-  { id:4, emoji:'💌', label:'Pesan Pagi' },
-  { id:5, emoji:'🎵', label:'Lagu Kita' },
-  { id:6, emoji:'🤗', label:'Rasa Aman' },
-];
-
-const QUESTIONS = [
-  {
-    q: '"Adek… kalau kamu marah sama seseorang yang kamu sayang, apa yang paling kamu harapkan dari mereka?"',
-    opts: [
-      { t:'💨 Menghilang dan biarkan aku tenang sendiri', correct:false },
-      { t:'🤐 Diam aja, jangan ganggu aku', correct:false },
-      { t:'💬 Datang, duduk di samping aku, dan minta maaf dengan jujur ❤️', correct:true },
-      { t:'🎁 Beli sesuatu supaya aku senang', correct:false },
-    ],
-    feedbackOk: '✨ Iya… itulah yang Mamas harusnya lakuin. Datang, bukannya lari.',
-    feedbackWrong: '💭 Mamas pernah salah kayak gitu… pergi waktu harusnya hadir.'
-  },
-  {
-    q: '"Menurutmu, apa yang bikin hubungan tetap kuat meski ada pertengkaran?"',
-    opts: [
-      { t:'🏃 Hindari konflik dengan tidak membahasnya', correct:false },
-      { t:'❤️ Saling mau bicara jujur, mau minta maaf, dan mau memaafkan', correct:true },
-      { t:'😎 Pura-pura baik-baik saja', correct:false },
-      { t:'📵 Diam sampai yang lain duluan yang minta maaf', correct:false },
-    ],
-    feedbackOk: '🥺 Benar sekali, Adek. Dan Mamas belajar itu dari kamu.',
-    feedbackWrong: '💔 Mamas sempat salah pikir kayak itu juga… tapi ternyata yang penting adalah keberanian untuk bicara.'
-  },
-  {
-    q: '"Adek… kalau ada orang yang takut kehilangan kamu tapi nggak tahu cara bilangnya… apa yang sebaiknya orang itu lakukan?"',
-    opts: [
-      { t:'😤 Marah-marah supaya diperhatiin', correct:false },
-      { t:'💔 Diam dan berharap dimengerti sendiri', correct:false },
-      { t:'🥺 Jujur aja, ceritain rasa takutnya dengan tulus ❤️', correct:true },
-      { t:'🤷 Ya udah, relain aja', correct:false },
-    ],
-    feedbackOk: '💖 Mamas tahu jawabannya sekarang. Mamas harus jujur sama Adek.',
-    feedbackWrong: '😔 Mamas pernah melakukan itu… dan hasilnya menyakiti Adek. Maafin Mamas ya.'
-  }
-];
-
-const TWIST_LINES = [
-  'Adek… sudah lama perjalanan ini.',
-  'Dunia ini memudar bukan karena ada yang jahat…',
-  'Tapi karena ada seseorang yang terlalu takut kehilangan kamu…',
-  '…dan tidak tahu cara bilang "maaf" dengan benar.',
-  'Selama ini kamu kira musuhnya ada di luar sana…',
-  '💥 Padahal "musuh" itu… adalah rasa takutnya Mamas sendiri.',
-];
-
-const MAMAS_SPEECH_LINES = [
-  'Adek…',
-  'Mamas minta maaf. 🥺',
-  'Bukan karena Mamas harus.',
-  'Tapi karena Mamas nggak mau kehilangan kamu.',
-  'Mamas nggak sempurna…',
-  '…tapi cinta Mamas ke Adek, itu nyata. ❤️',
-];
-
-const FINAL_LETTER = `Adek yang paling Mamas sayangi,
+        const FINAL_LETTER = `Adek yang paling Mamas sayangi,
 
 Mamas tau Adek lagi kecewa. Dan Mamas nggak mau pura-pura itu nggak ada.
 
@@ -843,419 +1589,425 @@ Maafin Mamas ya, Adek… 🥺❤️
 
 — Mamas`;
 
-/* ================================================================
-   SCENE MANAGEMENT
-================================================================ */
-const scenes = ['s-load','s-open','s-mood','s1','s2','s3','s-twist','s-final','s-end-good','s-end-wait'];
-let currentScene = 's-load';
+        /* ================================================================
+           SCENE MANAGEMENT
+        ================================================================ */
+        const scenes = ['s-load', 's-open', 's-mood', 's1', 's2', 's3', 's-twist', 's-twist2', 's-final', 's-end-good', 's-end-wait'];
+        let currentScene = 's-load';
 
-function showScene(id, delay=0) {
-  setTimeout(()=>{
-    const tov = document.getElementById('tov');
-    tov.classList.add('fade-in');
-    setTimeout(()=>{
-      scenes.forEach(s => {
-        const el = document.getElementById(s);
-        if(el) el.classList.remove('active');
-      });
-      currentScene = id;
-      const el = document.getElementById(id);
-      if(el) el.classList.add('active');
-      tov.classList.remove('fade-in');
-      updateWorldColor();
-    }, 500);
-  }, delay);
-}
-
-/* ================================================================
-   LOVE METER & WORLD COLOR
-================================================================ */
-function setLove(val) {
-  G.love = Math.max(0, Math.min(100, val));
-  const fill = document.getElementById('lm-fill');
-  const valEl = document.getElementById('lm-val');
-  if(fill) fill.style.width = G.love + '%';
-  if(valEl) valEl.textContent = G.love + '%';
-  updateWorldColor();
-  addScore(val > G.love ? 5 : 0);
-}
-
-function addLove(n) {
-  setLove(G.love + n);
-}
-
-function updateWorldColor() {
-  const s = (G.love / 100).toFixed(2);
-  document.documentElement.style.setProperty('--world-s', s);
-  const gc = document.getElementById('gc');
-  if(G.love > 60) gc.classList.add('colorful');
-  else gc.classList.remove('colorful');
-  // Update logo
-  const logo = document.getElementById('open-logo');
-  if(logo) logo.textContent = G.love >= 50 ? '💖' : '💔';
-}
-
-function addScore(n) {
-  G.score += n;
-  const sv = document.getElementById('sv');
-  if(sv) sv.textContent = G.score;
-}
-
-function showHUD() {
-  document.getElementById('lm').classList.add('show');
-  document.getElementById('score-ui').classList.add('show');
-}
-
-/* ================================================================
-   TYPEWRITER
-================================================================ */
-function typewrite(el, text, speed=40, cb) {
-  el.textContent = '';
-  let i = 0;
-  const cursor = document.getElementById('cursor');
-  const interval = setInterval(()=>{
-    el.textContent += text[i];
-    i++;
-    if(i >= text.length) {
-      clearInterval(interval);
-      if(cursor) cursor.style.display = 'none';
-      if(cb) setTimeout(cb, 600);
-    }
-  }, speed);
-  return interval;
-}
-
-async function typewriteMulti(el, lines, speed=35) {
-  return new Promise(resolve => {
-    let lineIdx = 0;
-    el.innerHTML = '';
-    const cursor = document.getElementById('cursor');
-
-    function typeLine() {
-      if(lineIdx >= lines.length) { resolve(); return; }
-      const line = lines[lineIdx];
-      let charIdx = 0;
-      const span = document.createElement('div');
-      span.style.marginBottom = '8px';
-      el.appendChild(span);
-      const iv = setInterval(()=>{
-        span.textContent += line[charIdx];
-        charIdx++;
-        if(charIdx >= line.length) {
-          clearInterval(iv);
-          lineIdx++;
-          setTimeout(typeLine, 400);
+        function showScene(id, delay = 0) {
+            setTimeout(() => {
+                const tov = document.getElementById('tov');
+                tov.classList.add('fade-in');
+                setTimeout(() => {
+                    scenes.forEach(s => {
+                        const el = document.getElementById(s);
+                        if (el) el.classList.remove('active');
+                    });
+                    currentScene = id;
+                    const el = document.getElementById(id);
+                    if (el) el.classList.add('active');
+                    tov.classList.remove('fade-in');
+                    updateWorldColor();
+                }, 500);
+            }, delay);
         }
-      }, speed);
-    }
-    typeLine();
-  });
-}
 
-/* ================================================================
-   PARTICLES
-================================================================ */
-(function initParticles() {
-  const canvas = document.getElementById('pc');
-  const ctx = canvas.getContext('2d');
-  let particles = [];
-  let W, H;
+        /* ================================================================
+           LOVE METER & WORLD COLOR
+        ================================================================ */
+        function setLove(val) {
+            G.love = Math.max(0, Math.min(100, val));
+            const fill = document.getElementById('lm-fill');
+            const valEl = document.getElementById('lm-val');
+            if (fill) fill.style.width = G.love + '%';
+            if (valEl) valEl.textContent = G.love + '%';
+            updateWorldColor();
+            addScore(val > G.love ? 5 : 0);
+        }
 
-  function resize() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
+        function addLove(n) {
+            setLove(G.love + n);
+        }
 
-  for(let i=0; i<60; i++) {
-    particles.push({
-      x: Math.random()*window.innerWidth,
-      y: Math.random()*window.innerHeight,
-      r: Math.random()*2+0.5,
-      vx: (Math.random()-0.5)*0.3,
-      vy: (Math.random()-0.5)*0.3,
-      alpha: Math.random()*0.5+0.2,
-      hue: Math.random()*60+300
-    });
-  }
+        function updateWorldColor() {
+            const s = (G.love / 100).toFixed(2);
+            document.documentElement.style.setProperty('--world-s', s);
+            const gc = document.getElementById('gc');
+            if (G.love > 60) gc.classList.add('colorful');
+            else gc.classList.remove('colorful');
+            // Update logo
+            const logo = document.getElementById('open-logo');
+            if (logo) logo.textContent = G.love >= 50 ? '💖' : '💔';
+        }
 
-  function draw() {
-    ctx.clearRect(0,0,W,H);
-    particles.forEach(p=>{
-      p.x += p.vx; p.y += p.vy;
-      if(p.x<0)p.x=W; if(p.x>W)p.x=0;
-      if(p.y<0)p.y=H; if(p.y>H)p.y=0;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-      ctx.fillStyle = `hsla(${p.hue},80%,70%,${p.alpha})`;
-      ctx.fill();
-    });
-    requestAnimationFrame(draw);
-  }
-  draw();
-})();
+        function addScore(n) {
+            G.score += n;
+            const sv = document.getElementById('sv');
+            if (sv) sv.textContent = G.score;
+        }
 
-/* ================================================================
-   FLOATING HEARTS
-================================================================ */
-function spawnHeart() {
-  const emojis = ['💖','💕','✨','💫','🌸','💝','🌟'];
-  const gc = document.getElementById('gc');
-  const el = document.createElement('div');
-  el.className = 'float-heart';
-  el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-  el.style.cssText = `
-    left:${Math.random()*90+5}%;
+        function showHUD() {
+            document.getElementById('lm').classList.add('show');
+            document.getElementById('score-ui').classList.add('show');
+        }
+
+        /* ================================================================
+           TYPEWRITER
+        ================================================================ */
+        function typewrite(el, text, speed = 40, cb) {
+            el.textContent = '';
+            let i = 0;
+            const cursor = document.getElementById('cursor');
+            const interval = setInterval(() => {
+                el.textContent += text[i];
+                i++;
+                if (i >= text.length) {
+                    clearInterval(interval);
+                    if (cursor) cursor.style.display = 'none';
+                    if (cb) setTimeout(cb, 600);
+                }
+            }, speed);
+            return interval;
+        }
+
+        async function typewriteMulti(el, lines, speed = 35) {
+            return new Promise(resolve => {
+                let lineIdx = 0;
+                el.innerHTML = '';
+                const cursor = document.getElementById('cursor');
+
+                function typeLine() {
+                    if (lineIdx >= lines.length) { resolve(); return; }
+                    const line = lines[lineIdx];
+                    let charIdx = 0;
+                    const span = document.createElement('div');
+                    span.style.marginBottom = '8px';
+                    el.appendChild(span);
+                    const iv = setInterval(() => {
+                        span.textContent += line[charIdx];
+                        charIdx++;
+                        if (charIdx >= line.length) {
+                            clearInterval(iv);
+                            lineIdx++;
+                            setTimeout(typeLine, 400);
+                        }
+                    }, speed);
+                }
+                typeLine();
+            });
+        }
+
+        /* ================================================================
+           PARTICLES
+        ================================================================ */
+        (function initParticles() {
+            const canvas = document.getElementById('pc');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let W, H;
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            for (let i = 0; i < 60; i++) {
+                particles.push({
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    r: Math.random() * 2 + 0.5,
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: (Math.random() - 0.5) * 0.3,
+                    alpha: Math.random() * 0.5 + 0.2,
+                    hue: Math.random() * 60 + 300
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, W, H);
+                particles.forEach(p => {
+                    p.x += p.vx; p.y += p.vy;
+                    if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+                    if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${p.hue},80%,70%,${p.alpha})`;
+                    ctx.fill();
+                });
+                requestAnimationFrame(draw);
+            }
+            draw();
+        })();
+
+        /* ================================================================
+           FLOATING HEARTS
+        ================================================================ */
+        function spawnHeart() {
+            const emojis = ['💖', '💕', '✨', '💫', '🌸', '💝', '🌟'];
+            const gc = document.getElementById('gc');
+            const el = document.createElement('div');
+            el.className = 'float-heart';
+            el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            el.style.cssText = `
+    left:${Math.random() * 90 + 5}%;
     bottom:0;
-    font-size:${Math.random()*14+10}px;
-    animation-duration:${Math.random()*4+4}s;
-    animation-delay:${Math.random()*2}s;
+    font-size:${Math.random() * 14 + 10}px;
+    animation-duration:${Math.random() * 4 + 4}s;
+    animation-delay:${Math.random() * 2}s;
   `;
-  gc.appendChild(el);
-  setTimeout(()=>el.remove(), 8000);
-}
-setInterval(()=>{
-  if(currentScene !== 's-load') spawnHeart();
-}, 1800);
+            gc.appendChild(el);
+            setTimeout(() => el.remove(), 8000);
+        }
+        setInterval(() => {
+            if (currentScene !== 's-load') spawnHeart();
+        }, 1800);
 
-/* ================================================================
-   AUDIO — Web Audio ambient
-================================================================ */
-let audioCtx;
-let ambientNodes = [];
-function startAmbient() {
-  try {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    // Gentle drone
-    function addTone(freq, gain, detune=0) {
-      const osc = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      const lfo = audioCtx.createOscillator();
-      const lfoG = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.value = freq;
-      osc.detune.value = detune;
-      g.gain.value = gain;
-      lfo.frequency.value = 0.2;
-      lfoG.gain.value = gain * 0.3;
-      lfo.connect(lfoG); lfoG.connect(g.gain);
-      osc.connect(g); g.connect(audioCtx.destination);
-      osc.start(); lfo.start();
-      ambientNodes.push(osc, lfo);
-    }
-    addTone(130.8, 0.04); // C3
-    addTone(196, 0.03);   // G3
-    addTone(261.6, 0.025); // C4
-    addTone(329.6, 0.02, 5); // E4 slightly detuned
-  } catch(e) {}
-}
-function stopAmbient() {
-  ambientNodes.forEach(n=>{ try{n.stop();}catch(e){} });
-  ambientNodes=[];
-}
+        /* ================================================================
+           AUDIO — Web Audio ambient
+        ================================================================ */
+        let audioCtx;
+        let ambientNodes = [];
+        function startAmbient() {
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                // Gentle drone
+                function addTone(freq, gain, detune = 0) {
+                    const osc = audioCtx.createOscillator();
+                    const g = audioCtx.createGain();
+                    const lfo = audioCtx.createOscillator();
+                    const lfoG = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    osc.detune.value = detune;
+                    g.gain.value = gain;
+                    lfo.frequency.value = 0.2;
+                    lfoG.gain.value = gain * 0.3;
+                    lfo.connect(lfoG); lfoG.connect(g.gain);
+                    osc.connect(g); g.connect(audioCtx.destination);
+                    osc.start(); lfo.start();
+                    ambientNodes.push(osc, lfo);
+                }
+                addTone(130.8, 0.04); // C3
+                addTone(196, 0.03);   // G3
+                addTone(261.6, 0.025); // C4
+                addTone(329.6, 0.02, 5); // E4 slightly detuned
+            } catch (e) { }
+        }
+        function stopAmbient() {
+            ambientNodes.forEach(n => { try { n.stop(); } catch (e) { } });
+            ambientNodes = [];
+        }
 
-/* ================================================================
-   SCENE: LOADING → OPENING
-================================================================ */
-window.addEventListener('load', ()=>{
-  setTimeout(()=>{
-    showScene('s-open');
-    setTimeout(startOpening, 700);
-  }, 2800);
-});
+        /* ================================================================
+           SCENE: LOADING → OPENING
+        ================================================================ */
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                showScene('s-open');
+                setTimeout(startOpening, 700);
+            }, 2800);
+        });
 
-async function startOpening() {
-  startAmbient();
-  const el = document.getElementById('open-text');
-  const cursor = document.getElementById('cursor');
-  cursor.style.display = 'inline';
+        async function startOpening() {
+            startAmbient();
+            const el = document.getElementById('open-text');
+            const cursor = document.getElementById('cursor');
+            cursor.style.display = 'inline';
 
-  const lines = [
-    'Adek… dunia ini kehilangan warnanya sejak kamu marah… 💔',
-    'Mamas butuh bantuan kamu untuk memperbaikinya.',
-    'Akankah kamu mau membantu? ✨'
-  ];
+            const lines = [
+                'Adek… dunia ini kehilangan warnanya sejak kamu marah… 💔',
+                'Mamas butuh bantuan kamu untuk memperbaikinya.',
+                'Akankah kamu mau membantu? ✨'
+            ];
 
-  for(let i=0; i<lines.length; i++) {
-    if(i>0) { el.textContent += '\n\n'; }
-    await new Promise(resolve=>{
-      let ci=0;
-      const iv = setInterval(()=>{
-        el.textContent = el.textContent.slice(0,-0) + lines.slice(0,i).join('\n\n') + (i>0?'\n\n':'') + lines[i].slice(0,ci+1);
-        ci++;
-        if(ci>=lines[i].length){clearInterval(iv);setTimeout(resolve,500);}
-      },38);
-    });
-  }
+            for (let i = 0; i < lines.length; i++) {
+                if (i > 0) { el.textContent += '\n\n'; }
+                await new Promise(resolve => {
+                    let ci = 0;
+                    const iv = setInterval(() => {
+                        el.textContent = el.textContent.slice(0, -0) + lines.slice(0, i).join('\n\n') + (i > 0 ? '\n\n' : '') + lines[i].slice(0, ci + 1);
+                        ci++;
+                        if (ci >= lines[i].length) { clearInterval(iv); setTimeout(resolve, 500); }
+                    }, 38);
+                });
+            }
 
-  cursor.style.display='none';
-  const btn = document.getElementById('btn-enter');
-  btn.style.opacity='1'; btn.style.pointerEvents='all';
-  btn.classList.add('fade-in');
-}
+            cursor.style.display = 'none';
+            const btn = document.getElementById('btn-enter');
+            btn.style.opacity = '1'; btn.style.pointerEvents = 'all';
+            btn.classList.add('fade-in');
+        }
 
-/* ================================================================
-   SCENE: MOOD
-================================================================ */
-function goToMood() {
-  showScene('s-mood');
-}
+        /* ================================================================
+           SCENE: MOOD
+        ================================================================ */
+        function goToMood() {
+            const bgMusic = document.getElementById('bg-music');
+            if (bgMusic) {
+                bgMusic.volume = 0.3; // Mengurangi volume menjadi 30%
+                if (bgMusic.paused) {
+                    bgMusic.play().catch(e => console.log('Playback failed', e));
+                }
+            }
+            showScene('s-mood');
+        }
 
-function pickMood(btn, mood) {
-  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
-  btn.classList.add('selected');
-  G.mood = mood;
-  const startBtn = document.getElementById('btn-start');
-  startBtn.style.display = 'block';
-  startBtn.classList.add('fade-in');
-}
+        function pickMood(btn, mood) {
+            document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            G.mood = mood;
+            const startBtn = document.getElementById('btn-start');
+            startBtn.style.display = 'block';
+            startBtn.classList.add('fade-in');
+        }
 
-/* ================================================================
-   SCENE 1: ORB GAME
-================================================================ */
-let orbInterval, orbGameActive = false;
-const ORB_MEMORIES = [...MEMORIES];
+        /* ================================================================
+           SCENE 1: ORB GAME
+        ================================================================ */
+        let orbInterval, orbGameActive = false;
+        const ORB_MEMORIES = [...MEMORIES];
 
-function startScene1() {
-  showHUD();
-  showScene('s1', 0);
-  setTimeout(startOrbGame, 700);
-}
+        function startScene1() {
+            showHUD();
+            showScene('s1', 0);
+            setTimeout(startOrbGame, 700);
+        }
 
-function startOrbGame() {
-  orbGameActive = true;
-  G.orbsCaught = 0;
-  document.getElementById('orb-count').textContent = '0';
-  const area = document.getElementById('orb-area');
-  area.innerHTML = '';
+        function startOrbGame() {
+            orbGameActive = true;
+            G.orbsCaught = 0;
+            document.getElementById('orb-count').textContent = '0';
+            const area = document.getElementById('orb-area');
+            area.innerHTML = '';
 
-  const colors = ['#ff6b9d','#c77dff','#7b9cff','#ffd166','#ff8fab','#6bffb8','#ff6b6b'];
-  let orbsSpawned = 0;
+            const colors = ['#ff6b9d', '#c77dff', '#7b9cff', '#ffd166', '#ff8fab', '#6bffb8', '#ff6b6b'];
+            let orbsSpawned = 0;
 
-  function spawnOrb() {
-    if(!orbGameActive || orbsSpawned > 20) return;
-    orbsSpawned++;
-    const orb = document.createElement('div');
-    orb.className = 'orb';
-    const size = Math.random()*30+40;
-    const color = colors[Math.floor(Math.random()*colors.length)];
-    const x = Math.random() * (window.innerWidth - size - 20) + 10;
-    const duration = Math.random()*5+6;
-    orb.style.cssText = `
+            function spawnOrb() {
+                if (!orbGameActive || orbsSpawned > 20) return;
+                orbsSpawned++;
+                const orb = document.createElement('div');
+                orb.className = 'orb';
+                const size = Math.random() * 30 + 40;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const x = Math.random() * (window.innerWidth - size - 20) + 10;
+                const duration = Math.random() * 5 + 6;
+                orb.style.cssText = `
       width:${size}px; height:${size}px;
       left:${x}px; bottom:60px;
       background:radial-gradient(circle at 35% 35%, rgba(255,255,255,0.4), ${color}99, ${color}44);
-      box-shadow:0 0 ${size/2}px ${color}88, 0 0 ${size}px ${color}44;
+      box-shadow:0 0 ${size / 2}px ${color}88, 0 0 ${size}px ${color}44;
       border:1px solid ${color}66;
       animation-duration:${duration}s;
     `;
-    const inner = document.createElement('div');
-    inner.className = 'orb-glow';
-    orb.appendChild(inner);
-    area.appendChild(orb);
+                const inner = document.createElement('div');
+                inner.className = 'orb-glow';
+                orb.appendChild(inner);
+                area.appendChild(orb);
 
-    orb.addEventListener('click', ()=>catchOrb(orb));
-    orb.addEventListener('touchstart', (e)=>{e.preventDefault(); catchOrb(orb);},{passive:false});
+                orb.addEventListener('click', () => catchOrb(orb));
+                orb.addEventListener('touchstart', (e) => { e.preventDefault(); catchOrb(orb); }, { passive: false });
 
-    setTimeout(()=>{ if(orb.parentNode) orb.remove(); }, duration*1000);
-  }
+                setTimeout(() => { if (orb.parentNode) orb.remove(); }, duration * 1000);
+            }
 
-  orbInterval = setInterval(spawnOrb, 1200);
-  spawnOrb(); spawnOrb(); spawnOrb();
-}
+            orbInterval = setInterval(spawnOrb, 1200);
+            spawnOrb(); spawnOrb(); spawnOrb();
+        }
 
-function catchOrb(orb) {
-  if(!orbGameActive) return;
-  G.orbsCaught++;
-  addLove(8); addScore(20);
-  document.getElementById('orb-count').textContent = G.orbsCaught;
+        function catchOrb(orb) {
+            if (!orbGameActive) return;
+            G.orbsCaught++;
+            addLove(8); addScore(20);
+            document.getElementById('orb-count').textContent = G.orbsCaught;
 
-  // Burst effect
-  const burst = document.createElement('div');
-  burst.className = 'orb-burst';
-  burst.style.cssText = `background:radial-gradient(circle, rgba(255,255,255,0.5), transparent 70%);`;
-  orb.appendChild(burst);
-  setTimeout(()=>orb.remove(), 300);
+            // Burst effect
+            const burst = document.createElement('div');
+            burst.className = 'orb-burst';
+            burst.style.cssText = `background:radial-gradient(circle, rgba(255,255,255,0.5), transparent 70%);`;
+            orb.appendChild(burst);
+            setTimeout(() => orb.remove(), 300);
 
-  // Show memory
-  const mem = ORB_MEMORIES[Math.floor(Math.random()*ORB_MEMORIES.length)];
-  showMemoryPopup(mem.icon, mem.text);
+            // Show memory
+            const mem = ORB_MEMORIES[Math.floor(Math.random() * ORB_MEMORIES.length)];
+            showMemoryPopup(mem.icon, mem.text);
 
-  if(G.orbsCaught >= 5) {
-    orbGameActive = false;
-    clearInterval(orbInterval);
-  }
-}
+            if (G.orbsCaught >= 5) {
+                orbGameActive = false;
+                clearInterval(orbInterval);
+            }
+        }
 
-function showMemoryPopup(icon, text) {
-  orbGameActive = false;
-  clearInterval(orbInterval);
-  document.getElementById('mem-icon').textContent = icon;
-  document.getElementById('mem-text').textContent = text;
-  document.getElementById('mem-popup').classList.add('show');
-}
+        function showMemoryPopup(icon, text) {
+            orbGameActive = false;
+            clearInterval(orbInterval);
+            document.getElementById('mem-icon').textContent = icon;
+            document.getElementById('mem-text').textContent = text;
+            document.getElementById('mem-popup').classList.add('show');
+        }
 
-function closeMemory() {
-  document.getElementById('mem-popup').classList.remove('show');
-  if(G.orbsCaught >= 5) {
-    setTimeout(startScene2, 600);
-  } else {
-    orbGameActive = true;
-    orbInterval = setInterval(()=>{
-      const area = document.getElementById('orb-area');
-      const orb = document.createElement('div');
-      const colors=['#ff6b9d','#c77dff','#7b9cff','#ffd166','#ff8fab'];
-      const size=Math.random()*30+40;
-      const color=colors[Math.floor(Math.random()*colors.length)];
-      const x=Math.random()*(window.innerWidth-size-20)+10;
-      const dur=Math.random()*5+6;
-      orb.className='orb';
-      orb.style.cssText=`width:${size}px;height:${size}px;left:${x}px;bottom:60px;
+        function closeMemory() {
+            document.getElementById('mem-popup').classList.remove('show');
+            if (G.orbsCaught >= 5) {
+                setTimeout(startScene2, 600);
+            } else {
+                orbGameActive = true;
+                orbInterval = setInterval(() => {
+                    const area = document.getElementById('orb-area');
+                    const orb = document.createElement('div');
+                    const colors = ['#ff6b9d', '#c77dff', '#7b9cff', '#ffd166', '#ff8fab'];
+                    const size = Math.random() * 30 + 40;
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    const x = Math.random() * (window.innerWidth - size - 20) + 10;
+                    const dur = Math.random() * 5 + 6;
+                    orb.className = 'orb';
+                    orb.style.cssText = `width:${size}px;height:${size}px;left:${x}px;bottom:60px;
         background:radial-gradient(circle at 35% 35%,rgba(255,255,255,0.4),${color}99,${color}44);
-        box-shadow:0 0 ${size/2}px ${color}88;border:1px solid ${color}66;
+        box-shadow:0 0 ${size / 2}px ${color}88;border:1px solid ${color}66;
         animation-duration:${dur}s;`;
-      const inner=document.createElement('div');inner.className='orb-glow';orb.appendChild(inner);
-      area.appendChild(orb);
-      orb.addEventListener('click',()=>catchOrb(orb));
-      orb.addEventListener('touchstart',(e)=>{e.preventDefault();catchOrb(orb);},{passive:false});
-      setTimeout(()=>{if(orb.parentNode)orb.remove();},dur*1000);
-    }, 1200);
-  }
-}
+                    const inner = document.createElement('div'); inner.className = 'orb-glow'; orb.appendChild(inner);
+                    area.appendChild(orb);
+                    orb.addEventListener('click', () => catchOrb(orb));
+                    orb.addEventListener('touchstart', (e) => { e.preventDefault(); catchOrb(orb); }, { passive: false });
+                    setTimeout(() => { if (orb.parentNode) orb.remove(); }, dur * 1000);
+                }, 1200);
+            }
+        }
 
-/* ================================================================
-   SCENE 2: PUZZLE / MEMORY MATCH
-================================================================ */
-let flippedCards = [], matchesDone = 0, canFlip = true;
+        /* ================================================================
+           SCENE 2: PUZZLE / MEMORY MATCH
+        ================================================================ */
+        let flippedCards = [], matchesDone = 0, canFlip = true;
 
-function startScene2() {
-  showScene('s2', 0);
-  setTimeout(buildPuzzle, 700);
-}
+        function startScene2() {
+            showScene('s2', 0);
+            setTimeout(buildPuzzle, 700);
+        }
 
-function buildPuzzle() {
-  matchesDone = 0;
-  flippedCards = [];
-  canFlip = true;
-  G.matchesDone = 0;
-  document.getElementById('match-count').textContent = '0';
-  document.getElementById('puzzle-msg').textContent = '';
+        function buildPuzzle() {
+            matchesDone = 0;
+            flippedCards = [];
+            canFlip = true;
+            G.matchesDone = 0;
+            document.getElementById('match-count').textContent = '0';
 
-  const grid = document.getElementById('puzzle-grid');
-  grid.innerHTML = '';
+            const grid = document.getElementById('puzzle-grid');
+            grid.innerHTML = '';
 
-  // Duplicate cards and shuffle
-  const deck = [...CARDS, ...CARDS].map((c,i)=>({...c, uid: i}));
-  deck.sort(()=>Math.random()-0.5);
+            // Duplicate cards and shuffle
+            const deck = [...CARDS, ...CARDS].map((c, i) => ({ ...c, uid: i }));
+            deck.sort(() => Math.random() - 0.5);
 
-  deck.forEach((card, idx) => {
-    const el = document.createElement('div');
-    el.className = 'card';
-    el.dataset.id = card.id;
-    el.dataset.uid = card.uid;
-    el.style.animationDelay = (idx * 0.05) + 's';
-    el.innerHTML = `
+            deck.forEach((card, idx) => {
+                const el = document.createElement('div');
+                el.className = 'card';
+                el.dataset.id = card.id;
+                el.dataset.uid = card.uid;
+                el.style.animationDelay = (idx * 0.05) + 's';
+                el.innerHTML = `
       <div class="card-inner">
         <div class="card-back"></div>
         <div class="card-front">
@@ -1263,321 +2015,351 @@ function buildPuzzle() {
           <div class="card-label">${card.label}</div>
         </div>
       </div>`;
-    el.addEventListener('click', ()=>flipCard(el));
-    grid.appendChild(el);
-  });
-}
+                el.addEventListener('click', () => flipCard(el));
+                grid.appendChild(el);
+            });
+        }
 
-function flipCard(el) {
-  if(!canFlip) return;
-  if(el.classList.contains('flipped') || el.classList.contains('matched')) return;
-  if(flippedCards.length >= 2) return;
+        function flipCard(el) {
+            if (!canFlip) return;
+            if (el.classList.contains('flipped') || el.classList.contains('matched')) return;
+            if (flippedCards.length >= 2) return;
 
-  el.classList.add('flipped');
-  flippedCards.push(el);
+            el.classList.add('flipped');
+            flippedCards.push(el);
 
-  if(flippedCards.length === 2) {
-    canFlip = false;
-    setTimeout(checkMatch, 700);
-  }
-}
+            if (flippedCards.length === 2) {
+                canFlip = false;
+                setTimeout(checkMatch, 700);
+            }
+        }
 
-function checkMatch() {
-  const [a,b] = flippedCards;
-  if(a.dataset.id === b.dataset.id) {
-    a.classList.add('matched'); b.classList.add('matched');
-    matchesDone++;
-    G.matchesDone = matchesDone;
-    document.getElementById('match-count').textContent = matchesDone;
-    addLove(6); addScore(30);
+        function checkMatch() {
+            const [a, b] = flippedCards;
+            if (a.dataset.id === b.dataset.id) {
+                a.classList.add('matched'); b.classList.add('matched');
+                matchesDone++;
+                G.matchesDone = matchesDone;
+                document.getElementById('match-count').textContent = matchesDone;
+                addLove(6); addScore(30);
 
-    const msgs = [
-      '"Kadang Mamas salah bicara… tapi hatinya selalu ke Adek." 🥺',
-      '"Setiap kenangan sama Adek adalah harta Mamas." 💖',
-      '"Mamas inget semuanya, Adek. Semua momen kecil itu." ✨',
-      '"Kamu tau nggak, senyum Adek itu bisa bikin hari Mamas balik cerah." 🌸',
-      '"Makasih udah jadi bagian dari hidup Mamas…" 💕',
-      '"Ini terakhir… Mamas nggak mau kehilangan Adek." 💝',
-    ];
-    document.getElementById('puzzle-msg').textContent = msgs[matchesDone-1] || '';
+                const msgs = [
+                    '"Kadang Mamas salah bicara… tapi hatinya selalu ke Adek." 🥺',
+                    '"Setiap kenangan sama Adek adalah harta Mamas." 💖',
+                    '"Mamas inget semuanya, Adek. Semua momen kecil itu." ✨',
+                    '"Kamu tau nggak, senyum Adek itu bisa bikin hari Mamas balik cerah." 🌸',
+                    '"Makasih udah jadi bagian dari hidup Mamas…" 💕',
+                    '"Ini terakhir… Mamas nggak mau kehilangan Adek." 💝',
+                ];
 
-    if(matchesDone >= 6) {
-      setTimeout(startScene3, 1500);
-    }
-  } else {
-    setTimeout(()=>{
-      a.classList.remove('flipped');
-      b.classList.remove('flipped');
-    }, 500);
-  }
-  flippedCards = [];
-  setTimeout(()=>{ canFlip = true; }, 600);
-}
+                document.getElementById('puzzle-popup-text').textContent = msgs[matchesDone - 1] || '';
+                document.getElementById('puzzle-popup').classList.add('show');
 
-/* ================================================================
-   SCENE 3: CHOICES
-================================================================ */
-let qIdx = 0;
+            } else {
+                setTimeout(() => {
+                    a.classList.remove('flipped');
+                    b.classList.remove('flipped');
+                }, 500);
+                setTimeout(() => { canFlip = true; }, 600);
+            }
+            flippedCards = [];
+        }
 
-function startScene3() {
-  qIdx = 0;
-  showScene('s3', 0);
-  setTimeout(showQuestion, 700);
-}
+        function closePuzzlePopup() {
+            document.getElementById('puzzle-popup').classList.remove('show');
+            if (matchesDone >= 6) {
+                setTimeout(startScene3, 600);
+            } else {
+                canFlip = true;
+            }
+        }
 
-function buildProgress() {
-  const prog = document.getElementById('q-prog');
-  prog.innerHTML = '';
-  QUESTIONS.forEach((q,i)=>{
-    const d = document.createElement('div');
-    d.className = 'q-dot' + (i < qIdx ? ' done' : i === qIdx ? ' active' : '');
-    prog.appendChild(d);
-  });
-}
+        /* ================================================================
+           SCENE 3: CHOICES
+        ================================================================ */
+        let qIdx = 0;
 
-function showQuestion() {
-  if(qIdx >= QUESTIONS.length) {
-    setTimeout(startTwistScene, 800);
-    return;
-  }
-  buildProgress();
-  const q = QUESTIONS[qIdx];
-  const qtEl = document.getElementById('q-text');
-  const qoEl = document.getElementById('q-opts');
-  const qfEl = document.getElementById('q-fb');
+        function startScene3() {
+            qIdx = 0;
+            showScene('s3', 0);
+            setTimeout(showQuestion, 700);
+        }
 
-  qtEl.textContent = '';
-  qoEl.innerHTML = '';
-  qfEl.textContent = '';
+        function buildProgress() {
+            const prog = document.getElementById('q-prog');
+            prog.innerHTML = '';
+            QUESTIONS.forEach((q, i) => {
+                const d = document.createElement('div');
+                d.className = 'q-dot' + (i < qIdx ? ' done' : i === qIdx ? ' active' : '');
+                prog.appendChild(d);
+            });
+        }
 
-  // Typewrite question
-  let ci = 0;
-  const iv = setInterval(()=>{
-    qtEl.textContent += q.q[ci]; ci++;
-    if(ci>=q.q.length) clearInterval(iv);
-  }, 30);
+        function showQuestion() {
+            if (qIdx >= QUESTIONS.length) {
+                setTimeout(startTwistScene, 800);
+                return;
+            }
+            buildProgress();
+            const q = QUESTIONS[qIdx];
+            const qtEl = document.getElementById('q-text');
+            const qoEl = document.getElementById('q-opts');
 
-  q.opts.forEach((opt,i)=>{
-    setTimeout(()=>{
-      const btn = document.createElement('button');
-      btn.className = 'q-option';
-      btn.textContent = opt.t;
-      btn.onclick = ()=>answerQ(btn, opt, q);
-      qoEl.appendChild(btn);
-      btn.classList.add('fade-in');
-    }, i*120 + 600);
-  });
-}
+            qtEl.textContent = '';
+            qoEl.innerHTML = '';
 
-function answerQ(btn, opt, q) {
-  document.querySelectorAll('.q-option').forEach(b=>b.disabled=true);
-  const fb = document.getElementById('q-fb');
+            // Typewrite question
+            let ci = 0;
+            const iv = setInterval(() => {
+                qtEl.textContent += q.q[ci]; ci++;
+                if (ci >= q.q.length) clearInterval(iv);
+            }, 30);
 
-  if(opt.correct) {
-    btn.classList.add('correct');
-    addLove(15); addScore(50);
-    fb.textContent = q.feedbackOk;
-    fb.style.color = '#6bffb8';
-    G.choices.push('correct');
-  } else {
-    btn.classList.add('wrong');
-    // Show correct
-    document.querySelectorAll('.q-option').forEach(b=>{
-      const text = b.textContent;
-      const correctOpt = q.opts.find(o=>o.correct);
-      if(text === correctOpt.t) b.classList.add('correct');
-    });
-    addLove(-5); addScore(10);
-    fb.textContent = q.feedbackWrong;
-    fb.style.color = '#ffb3b3';
-    G.choices.push('wrong');
-  }
+            q.opts.forEach((opt, i) => {
+                setTimeout(() => {
+                    const btn = document.createElement('button');
+                    btn.className = 'q-option';
+                    btn.textContent = opt.t;
+                    btn.onclick = () => answerQ(btn, opt, q);
+                    qoEl.appendChild(btn);
+                    btn.classList.add('fade-in');
+                }, i * 120 + 600);
+            });
+        }
 
-  setTimeout(()=>{
-    qIdx++;
-    showQuestion();
-  }, 2000);
-}
+        function answerQ(btn, opt, q) {
+            document.querySelectorAll('.q-option').forEach(b => b.disabled = true);
+            const popupText = document.getElementById('choice-popup-text');
+            const popupIcon = document.getElementById('choice-popup-icon');
 
-/* ================================================================
-   SCENE: TWIST
-================================================================ */
-async function startTwistScene() {
-  showScene('s-twist', 0);
-  await sleep(800);
+            if (opt.correct) {
+                btn.classList.add('correct');
+                addLove(15); addScore(50);
+                popupIcon.textContent = '✨';
+                popupText.textContent = q.feedbackOk;
+                popupText.style.color = '#6bffb8';
+                G.choices.push('correct');
+            } else {
+                btn.classList.add('wrong');
+                // Show correct
+                document.querySelectorAll('.q-option').forEach(b => {
+                    const text = b.textContent;
+                    const correctOpt = q.opts.find(o => o.correct);
+                    if (text === correctOpt.t) b.classList.add('correct');
+                });
+                addLove(-5); addScore(10);
+                popupIcon.textContent = '💔';
+                popupText.textContent = q.feedbackWrong;
+                popupText.style.color = '#ffb3b3';
+                G.choices.push('wrong');
+            }
 
-  const dlg = document.getElementById('twist-dlg');
-  dlg.innerHTML='';
+            setTimeout(() => {
+                document.getElementById('choice-popup').classList.add('show');
+            }, 800);
+        }
 
-  // Animate castle entrance
-  const castle = document.getElementById('twist-castle');
-  castle.style.animation = 'floatLogo 3s ease-in-out infinite';
+        function closeChoicePopup() {
+            document.getElementById('choice-popup').classList.remove('show');
+            setTimeout(() => {
+                qIdx++;
+                showQuestion();
+            }, 400);
+        }
 
-  // Type twist lines
-  for(let i=0; i<TWIST_LINES.length; i++){
-    const p = document.createElement('div');
-    p.style.marginBottom='8px';
-    dlg.appendChild(p);
-    await typeAsync(p, TWIST_LINES[i], 45);
-    await sleep(300);
-    addLove(3);
-  }
-  await sleep(700);
+        /* ================================================================
+           SCENE: TWIST 1
+        ================================================================ */
+        async function startTwistScene() {
+            showScene('s-twist', 0);
+            await sleep(800);
 
-  // Show Mamas character
-  const mamasC = document.getElementById('mamas-c');
-  mamasC.style.opacity = '0';
-  mamasC.style.transition = 'opacity 1s ease';
-  setTimeout(()=>{ mamasC.style.opacity='1'; }, 200);
+            const dlg = document.getElementById('twist-dlg');
+            dlg.innerHTML = '';
 
-  const speech = document.getElementById('mamas-speech');
-  speech.innerHTML='';
-  await sleep(1200);
+            // Animate castle entrance
+            const castle = document.getElementById('twist-castle');
+            castle.style.animation = 'floatLogo 3s ease-in-out infinite';
 
-  for(let line of MAMAS_SPEECH_LINES){
-    await typeAsync(speech, line, 50);
-    await sleep(400);
-    speech.innerHTML += '<br>';
-    addLove(2);
-  }
+            // Type twist lines
+            for (let i = 0; i < TWIST_LINES.length; i++) {
+                const p = document.createElement('div');
+                p.style.marginBottom = '8px';
+                dlg.appendChild(p);
+                await typeAsync(p, TWIST_LINES[i], 45);
+                await sleep(300);
+                addLove(3);
+            }
+            await sleep(700);
 
-  await sleep(800);
-  const btn = document.getElementById('btn-final');
-  btn.style.opacity='1'; btn.style.pointerEvents='all';
-  btn.classList.add('fade-in');
-}
+            const btnNext = document.getElementById('btn-next-twist');
+            btnNext.style.opacity = '1'; btnNext.style.pointerEvents = 'all';
+            btnNext.classList.add('fade-in');
+        }
 
-function typeAsync(el, text, speed=40) {
-  return new Promise(resolve=>{
-    let i=0;
-    const iv = setInterval(()=>{
-      el.textContent += text[i]; i++;
-      if(i>=text.length){ clearInterval(iv); resolve(); }
-    }, speed);
-  });
-}
+        /* ================================================================
+           SCENE: TWIST 2
+        ================================================================ */
+        async function startTwist2Scene() {
+            showScene('s-twist2', 0);
+            await sleep(800);
 
-function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
+            // Show Mamas character
+            const mamasC = document.getElementById('mamas-c');
+            mamasC.style.opacity = '0';
+            mamasC.style.transition = 'opacity 1s ease';
+            setTimeout(() => { mamasC.style.opacity = '1'; }, 200);
 
-/* ================================================================
-   SCENE: FINAL
-================================================================ */
-async function goToFinal() {
-  showScene('s-final', 0);
-  await sleep(700);
+            const speech = document.getElementById('mamas-speech');
+            speech.innerHTML = '';
+            await sleep(1200);
 
-  const body = document.getElementById('letter-body');
-  body.innerHTML = '';
-  const lines = FINAL_LETTER.split('\n');
-  for(let line of lines) {
-    const p = document.createElement('div');
-    p.style.marginBottom = line.trim()==='' ? '12px' : '0';
-    p.textContent = line;
-    body.appendChild(p);
-    await sleep(100);
-  }
-  document.querySelector('.final-q').classList.add('fade-in');
-  document.querySelector('.final-btns').classList.add('fade-in');
-}
+            for (let line of MAMAS_SPEECH_LINES) {
+                await typeAsync(speech, line, 50);
+                await sleep(400);
+                speech.innerHTML += '<br>';
+                addLove(2);
+            }
 
-/* ================================================================
-   ENDINGS
-================================================================ */
-async function chooseEnding(type) {
-  G.ending = type;
-  saveToSheets();
+            await sleep(800);
+            const btn = document.getElementById('btn-final');
+            btn.style.opacity = '1'; btn.style.pointerEvents = 'all';
+            btn.classList.add('fade-in');
+        }
 
-  if(type === 'forgive') {
-    // Max love meter
-    setLove(100);
-    showScene('s-end-good', 0);
-    await sleep(700);
-    launchConfetti();
-    addScore(100);
+        function typeAsync(el, text, speed = 40) {
+            return new Promise(resolve => {
+                let i = 0;
+                const iv = setInterval(() => {
+                    el.textContent += text[i]; i++;
+                    if (i >= text.length) { clearInterval(iv); resolve(); }
+                }, speed);
+            });
+        }
 
-    const title = document.getElementById('end-good-title');
-    const msg = document.getElementById('end-good-msg');
-    await typeAsync(title, 'Dunia Kembali Berwarna! 🌈', 40);
-    await sleep(500);
-    const text = 'Dunia ini kembali penuh warna… bukan karena sihir, bukan karena keajaiban biasa.\n\nTapi karena senyum Adek. 💖\n\nMakasih ya Adek, udah mau maafin Mamas. Mamas janji akan terus belajar, terus hadir, terus mencintai Adek dengan cara yang lebih baik.\n\n— Mamas ❤️';
-    await typeAsync(msg, text, 20);
-  } else {
-    showScene('s-end-wait', 0);
-    await sleep(700);
-    const msg = document.getElementById('end-wait-msg');
-    await typeAsync(msg, 'Gak apa-apa, Adek. Mamas nggak akan kemana-mana.\n\nMamas akan ada di sini, menunggu. Setiap hari Mamas akan belajar jadi lebih baik, untuk Adek.\n\nWaktu Adek udah siap… Mamas ada. Selalu. 🌙✨\n\n— Mamas', 25);
-  }
-}
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-/* ================================================================
-   CONFETTI
-================================================================ */
-function launchConfetti() {
-  const wrap = document.getElementById('confetti-wrap');
-  const colors = ['#ff6b9d','#c77dff','#ffd166','#6bffb8','#7b9cff','#ff8fab'];
-  for(let i=0; i<80; i++){
-    const c = document.createElement('div');
-    c.className = 'confetti-piece';
-    c.style.cssText = `
-      left:${Math.random()*100}%;
-      background:${colors[Math.floor(Math.random()*colors.length)]};
-      width:${Math.random()*8+6}px;
-      height:${Math.random()*8+6}px;
-      border-radius:${Math.random()>0.5?'50%':'2px'};
-      animation-duration:${Math.random()*3+2}s;
-      animation-delay:${Math.random()*2}s;
-      transform:rotate(${Math.random()*360}deg);
+        /* ================================================================
+           SCENE: FINAL
+        ================================================================ */
+        async function goToFinal() {
+            showScene('s-final', 0);
+            await sleep(700);
+
+            const body = document.getElementById('letter-body');
+            body.innerHTML = '';
+            const lines = FINAL_LETTER.split('\n');
+            for (let line of lines) {
+                const p = document.createElement('div');
+                p.style.marginBottom = line.trim() === '' ? '12px' : '0';
+                p.textContent = line;
+                body.appendChild(p);
+                await sleep(100);
+            }
+            document.querySelector('.final-q').classList.add('fade-in');
+            document.querySelector('.final-btns').classList.add('fade-in');
+        }
+
+        /* ================================================================
+           ENDINGS
+        ================================================================ */
+        async function chooseEnding(type) {
+            G.ending = type;
+            saveToSheets();
+
+            if (type === 'forgive') {
+                // Max love meter
+                setLove(100);
+                showScene('s-end-good', 0);
+                await sleep(700);
+                launchConfetti();
+                addScore(100);
+
+                const title = document.getElementById('end-good-title');
+                const msg = document.getElementById('end-good-msg');
+                title.innerHTML = '';
+                await typeAsync(title, 'Dunia Kembali Berwarna! 🌈', 40);
+                await sleep(500);
+                const text = 'Dunia ini kembali penuh warna… bukan karena sihir, bukan karena keajaiban biasa.\n\nTapi karena senyum Adek. 💖\n\nMakasih ya Adek, udah mau maafin Mamas. Mamas janji akan terus belajar, terus hadir, terus mencintai Adek dengan cara yang lebih baik.\n\n— Mamas ❤️';
+                await typeAsync(msg, text, 20);
+            } else {
+                showScene('s-end-wait', 0);
+                await sleep(700);
+                const msg = document.getElementById('end-wait-msg');
+                await typeAsync(msg, 'Gak apa-apa, Adek. Mamas nggak akan kemana-mana.\n\nMamas akan ada di sini, menunggu. Setiap hari Mamas akan belajar jadi lebih baik, untuk Adek.\n\nWaktu Adek udah siap… Mamas ada. Selalu. 🌙✨\n\n— Mamas', 25);
+            }
+        }
+
+        /* ================================================================
+           CONFETTI
+        ================================================================ */
+        function launchConfetti() {
+            const wrap = document.getElementById('confetti-wrap');
+            const colors = ['#ff6b9d', '#c77dff', '#ffd166', '#6bffb8', '#7b9cff', '#ff8fab'];
+            for (let i = 0; i < 80; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti-piece';
+                c.style.cssText = `
+      left:${Math.random() * 100}%;
+      background:${colors[Math.floor(Math.random() * colors.length)]};
+      width:${Math.random() * 8 + 6}px;
+      height:${Math.random() * 8 + 6}px;
+      border-radius:${Math.random() > 0.5 ? '50%' : '2px'};
+      animation-duration:${Math.random() * 3 + 2}s;
+      animation-delay:${Math.random() * 2}s;
+      transform:rotate(${Math.random() * 360}deg);
     `;
-    wrap.appendChild(c);
-  }
-  setTimeout(()=>{ wrap.innerHTML=''; }, 8000);
-}
+                wrap.appendChild(c);
+            }
+            setTimeout(() => { wrap.innerHTML = ''; }, 8000);
+        }
 
-/* ================================================================
-   SAVE TO GOOGLE SHEETS
-================================================================ */
-function saveToSheets() {
-  if(!SHEETS_API_URL || SHEETS_API_URL.includes('YOUR_GOOGLE')) return;
-  const data = {
-    timestamp: new Date().toISOString(),
-    nama: G.name,
-    mood_awal: G.mood,
-    skor: G.score,
-    love_meter: G.love,
-    pilihan_story: G.choices.join(','),
-    ending: G.ending,
-    durasi_menit: Math.round((Date.now()-G.startTime)/60000)
-  };
-  fetch(SHEETS_API_URL, {
-    method:'POST',
-    mode:'no-cors',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify(data)
-  }).catch(()=>{});
-}
+        /* ================================================================
+           SAVE TO GOOGLE SHEETS
+        ================================================================ */
+        function saveToSheets() {
+            if (!SHEETS_API_URL || SHEETS_API_URL.includes('YOUR_GOOGLE')) return;
+            const data = {
+                timestamp: new Date().toISOString(),
+                nama: G.name,
+                mood_awal: G.mood,
+                skor: G.score,
+                love_meter: G.love,
+                pilihan_story: G.choices.join(','),
+                ending: G.ending,
+                durasi_menit: Math.round((Date.now() - G.startTime) / 60000)
+            };
+            fetch(SHEETS_API_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).catch(() => { });
+        }
 
-/* ================================================================
-   RESTART
-================================================================ */
-function restartGame() {
-  G.love=30; G.score=0; G.choices=[]; G.mood=''; G.orbsCaught=0;
-  G.matchesDone=0; G.ending=''; G.startTime=Date.now();
-  qIdx=0; matchesDone=0; flippedCards=[];
-  document.getElementById('lm-fill').style.width='30%';
-  document.getElementById('lm-val').textContent='30%';
-  document.getElementById('sv').textContent='0';
-  document.getElementById('lm').classList.remove('show');
-  document.getElementById('score-ui').classList.remove('show');
-  updateWorldColor();
-  showScene('s-open');
-  setTimeout(()=>{
-    document.getElementById('open-text').textContent='';
-    document.getElementById('cursor').style.display='inline';
-    const btn=document.getElementById('btn-enter');
-    btn.style.opacity='0'; btn.style.pointerEvents='none';
-    startOpening();
-  }, 700);
-}
-</script>
+        /* ================================================================
+           RESTART
+        ================================================================ */
+        function restartGame() {
+            G.love = 30; G.score = 0; G.choices = []; G.mood = ''; G.orbsCaught = 0;
+            G.matchesDone = 0; G.ending = ''; G.startTime = Date.now();
+            qIdx = 0; matchesDone = 0; flippedCards = [];
+            document.getElementById('lm-fill').style.width = '30%';
+            document.getElementById('lm-val').textContent = '30%';
+            document.getElementById('sv').textContent = '0';
+            document.getElementById('lm').classList.remove('show');
+            document.getElementById('score-ui').classList.remove('show');
+            updateWorldColor();
+            showScene('s-open');
+            setTimeout(() => {
+                document.getElementById('open-text').textContent = '';
+                document.getElementById('cursor').style.display = 'inline';
+                const btn = document.getElementById('btn-enter');
+                btn.style.opacity = '0'; btn.style.pointerEvents = 'none';
+                startOpening();
+            }, 700);
+        }
+    </script>
 </body>
+
 </html>
